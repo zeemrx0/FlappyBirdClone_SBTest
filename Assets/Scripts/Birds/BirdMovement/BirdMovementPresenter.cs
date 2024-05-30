@@ -1,3 +1,4 @@
+using LNE.Colliders;
 using LNE.Inputs;
 using UnityEngine;
 using Zenject;
@@ -18,9 +19,13 @@ namespace LNE.Birds
     [SerializeField]
     private float _rotateSpeed = 1f;
 
+    [SerializeField]
+    private GameObject _pipePairsContainer;
+
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
+    private GameBoxCollider _collider;
     
     private float _verticalSpeed = 0f;
 
@@ -35,6 +40,7 @@ namespace LNE.Birds
     private void Awake()
     {
       _view = GetComponent<BirdMovementView>();
+      _collider = GetComponent<GameBoxCollider>();
     }
 
     private void OnEnable()
@@ -51,6 +57,17 @@ namespace LNE.Birds
     {
       _verticalSpeed += _gravity * _mass * Time.deltaTime;
       _view.Flap(_verticalSpeed, _rotateSpeed);
+
+      foreach (Transform pipePair in _pipePairsContainer.transform)
+      {
+        foreach (Transform pipe in pipePair)
+        {
+          if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
+          {
+            Debug.Log("Game Over!");
+          }
+        }
+      }
     }
 
     private void Flap()

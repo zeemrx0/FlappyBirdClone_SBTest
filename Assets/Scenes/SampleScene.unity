@@ -553,6 +553,7 @@ GameObject:
   - component: {fileID: 1059909718}
   - component: {fileID: 1059909719}
   - component: {fileID: 1059909720}
+  - component: {fileID: 1059909721}
   m_Layer: 0
   m_Name: PlayerBird
   m_TagString: Untagged
@@ -592,6 +593,7 @@ MonoBehaviour:
   _gravity: -9.8
   _mass: 8
   _rotateSpeed: 1
+  _pipePairsContainer: {fileID: 913703294}
 --- !u!114 &1059909720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,6 +606,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427e643ff5da54ceca86549a88db5929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1059909721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059909717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a5f0061d5a2e4cbf9dc78548b53e597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Width>k__BackingField: 2
+  <Height>k__BackingField: 1.6
 --- !u!1 &1810013372
 GameObject:
   m_ObjectHideFlags: 0
