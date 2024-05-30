@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace LNE.Movements
+namespace LNE.Birds
 {
   public class BirdMovementView : MonoBehaviour
   {

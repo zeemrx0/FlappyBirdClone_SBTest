@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace LNE.Core
+namespace LNE.Pipes
 {
   public class PipePair : MonoBehaviour {
     public void SetSpaceBetween(float space) {

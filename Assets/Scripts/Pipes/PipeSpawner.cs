@@ -1,7 +1,6 @@
-using LNE.Core;
 using UnityEngine;
 
-namespace LNE.Spawners
+namespace LNE.Pipes
 {
   public class PipeSpawner : MonoBehaviour
   {

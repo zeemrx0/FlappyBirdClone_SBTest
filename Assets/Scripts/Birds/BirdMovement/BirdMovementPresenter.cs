@@ -2,7 +2,7 @@ using LNE.Inputs;
 using UnityEngine;
 using Zenject;
 
-namespace LNE.Movements
+namespace LNE.Birds
 {
   public class BirdMovementPresenter : MonoBehaviour
   {

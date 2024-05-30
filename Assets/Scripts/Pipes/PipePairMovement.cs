@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace LNE.Movements
+namespace LNE.Pipes
 {
   public class PipePairMovement : MonoBehaviour {
     [SerializeField]
