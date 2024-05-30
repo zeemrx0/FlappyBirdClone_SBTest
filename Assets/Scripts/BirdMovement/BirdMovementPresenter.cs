@@ -15,6 +15,9 @@ namespace LNE.Movements
     [SerializeField]
     private float _mass = 1f;
 
+    [SerializeField]
+    private float _rotateSpeed = 1f;
+
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
@@ -47,7 +50,7 @@ namespace LNE.Movements
     void Update()
     {
       _verticalSpeed += _gravity * _mass * Time.deltaTime;
-      _view.Flap(_verticalSpeed);
+      _view.Flap(_verticalSpeed, _rotateSpeed);
     }
 
     private void Flap()

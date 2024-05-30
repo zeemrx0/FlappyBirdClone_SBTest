@@ -475,8 +475,8 @@ MonoBehaviour:
   _maxSpawnInterval: 2.1
   _minSpawnY: -6
   _maxSpawnY: 6
-  _minSpaceBetweenPipes: 24.5
-  _maxSpaceBetweenPipes: 25.5
+  _minSpaceBetweenPipes: 24.3
+  _maxSpaceBetweenPipes: 25.3
 --- !u!1 &1032321738
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,6 +591,7 @@ MonoBehaviour:
   _flapForce: 18
   _gravity: -9.8
   _mass: 8
+  _rotateSpeed: 1
 --- !u!114 &1059909720
 MonoBehaviour:
   m_ObjectHideFlags: 0

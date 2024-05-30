@@ -21,10 +21,10 @@ namespace LNE.Spawners
     private float _maxSpawnY = 6f;
 
     [SerializeField]
-    private float _minSpaceBetweenPipes = 24.5f;
+    private float _minSpaceBetweenPipes = 24.3f;
 
     [SerializeField]
-    private float _maxSpaceBetweenPipes = 25.5f;
+    private float _maxSpaceBetweenPipes = 25.3f;
 
     private float _timeUntilNextSpawn = 0f;
 
