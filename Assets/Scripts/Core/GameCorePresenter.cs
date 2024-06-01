@@ -1,4 +1,5 @@
 using System;
+using LNE.UI;
 using LNE.Utilities.Constants;
 using UnityEngine;
 using Zenject;
@@ -14,18 +15,21 @@ namespace LNE.Core
     public int Points { get; private set; } = 0;
     public bool IsAIPlayMode { get; private set; } = false;
 
+    [SerializeField]
+    private GameOverCanvas _gameOverCanvas;
+
+    [SerializeField]
+    private GameStartCanvas _gameStartCanvas;
+
+    [SerializeField]
+    private InfoCanvas _infoCanvas;
+
     private ZenjectSceneLoader _zenjectSceneLoader;
-    private GameCoreView _view;
 
     [Inject]
     private void Construct(ZenjectSceneLoader zenjectSceneLoader)
     {
       _zenjectSceneLoader = zenjectSceneLoader;
-    }
-
-    private void Awake()
-    {
-      _view = GetComponent<GameCoreView>();
     }
 
     public void StartGame(bool isAIPlayMode)
@@ -37,8 +41,9 @@ namespace LNE.Core
 
       IsGameStarted = true;
       IsAIPlayMode = isAIPlayMode;
-      HideGameStartCanvas();
-      ShowInfoCanvas();
+      _gameStartCanvas.Hide();
+      _infoCanvas.Show();
+      _infoCanvas.SetPoints(Points);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
@@ -51,14 +56,15 @@ namespace LNE.Core
 
       IsGameOver = true;
       TriggerPlayerDead();
-      ShowGameOverCanvas();
-      HideInfoCanvas();
+      _gameOverCanvas.Show();
+      _gameOverCanvas.SetPoints(Points);
+      _infoCanvas.Hide();
     }
 
     public void ToggleIsAIPlayMode()
     {
       IsAIPlayMode = !IsAIPlayMode;
-      _view.SetExitAIPlayModeButtonState(IsAIPlayMode);
+      _infoCanvas.SetExitAIPlayModeButtonState(IsAIPlayMode);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
@@ -80,28 +86,12 @@ namespace LNE.Core
     public void AddPoint()
     {
       Points++;
-      _view.SetPointsInfoCanvas(Points);
+      _infoCanvas.SetPoints(Points);
     }
 
-    public void ShowGameOverCanvas()
+    public void ShowAIModeMessage()
     {
-      _view.ShowGameOverCanvas(Points);
-    }
-
-    public void HideGameStartCanvas()
-    {
-      _view.HideGameStartCanvas();
-    }
-
-    public void ShowInfoCanvas()
-    {
-      _view.ShowInfoCanvas(Points);
-      _view.SetPointsInfoCanvas(Points);
-    }
-
-    public void HideInfoCanvas()
-    {
-      _view.HideInfoCanvas();
+      _infoCanvas.ShowAIModeMessage(2f);
     }
   }
 }

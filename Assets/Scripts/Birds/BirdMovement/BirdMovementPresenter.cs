@@ -155,6 +155,7 @@ namespace LNE.Birds
     {
       if (_gameCoreManager.IsAIPlayMode)
       {
+        _gameCoreManager.ShowAIModeMessage();
         return;
       }
 
