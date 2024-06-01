@@ -1,3 +1,5 @@
+using System;
+using LNE.UI;
 using LNE.Utilities.Constants;
 using UnityEngine;
 using Zenject;
@@ -6,13 +8,23 @@ namespace LNE.Core
 {
   public class GameCorePresenter : MonoBehaviour
   {
+    public event Action<bool> OnChangePlayMode;
     public bool IsGameOver { get; private set; } = false;
     public bool IsGameStarted { get; private set; } = false;
     public bool IsPlayerDead { get; private set; } = false;
     public int Points { get; private set; } = 0;
+    public bool IsAIPlayMode { get; private set; } = false;
+
+    [SerializeField]
+    private GameOverCanvas _gameOverCanvas;
+
+    [SerializeField]
+    private GameStartCanvas _gameStartCanvas;
+
+    [SerializeField]
+    private InfoCanvas _infoCanvas;
 
     private ZenjectSceneLoader _zenjectSceneLoader;
-    private GameCoreView _view;
 
     [Inject]
     private void Construct(ZenjectSceneLoader zenjectSceneLoader)
@@ -20,12 +32,7 @@ namespace LNE.Core
       _zenjectSceneLoader = zenjectSceneLoader;
     }
 
-    private void Awake()
-    {
-      _view = GetComponent<GameCoreView>();
-    }
-
-    public void StartGame()
+    public void StartGame(bool isAIPlayMode)
     {
       if (IsGameStarted)
       {
@@ -33,8 +40,11 @@ namespace LNE.Core
       }
 
       IsGameStarted = true;
-      HideGameStartCanvas();
-      ShowInfoCanvas();
+      IsAIPlayMode = isAIPlayMode;
+      _gameStartCanvas.Hide();
+      _infoCanvas.Show();
+      _infoCanvas.SetPoints(Points);
+      OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
     public void TriggerGameOver()
@@ -46,8 +56,16 @@ namespace LNE.Core
 
       IsGameOver = true;
       TriggerPlayerDead();
-      ShowGameOverCanvas();
-      HideInfoCanvas();
+      _gameOverCanvas.Show();
+      _gameOverCanvas.SetPoints(Points);
+      _infoCanvas.Hide();
+    }
+
+    public void ToggleIsAIPlayMode()
+    {
+      IsAIPlayMode = !IsAIPlayMode;
+      _infoCanvas.SetExitAIPlayModeButtonState(IsAIPlayMode);
+      OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
     public void TriggerPlayerDead()
@@ -68,28 +86,12 @@ namespace LNE.Core
     public void AddPoint()
     {
       Points++;
-      _view.SetPointsInfoCanvas(Points);
+      _infoCanvas.SetPoints(Points);
     }
 
-    public void ShowGameOverCanvas()
+    public void ShowAIModeMessage()
     {
-      _view.ShowGameOverCanvas(Points);
-    }
-
-    public void HideGameStartCanvas()
-    {
-      _view.HideGameStartCanvas();
-    }
-
-    public void ShowInfoCanvas()
-    {
-      _view.ShowInfoCanvas();
-      _view.SetPointsInfoCanvas(Points);
-    }
-
-    public void HideInfoCanvas()
-    {
-      _view.HideInfoCanvas();
+      _infoCanvas.ShowAIModeMessage(2f);
     }
   }
 }

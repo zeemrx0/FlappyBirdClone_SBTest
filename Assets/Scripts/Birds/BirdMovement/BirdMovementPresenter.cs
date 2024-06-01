@@ -25,6 +25,7 @@ namespace LNE.Birds
     private BirdMovementView _view;
     private GameBoxCollider _collider;
     private BirdMovementModel _model;
+    private AIBird _aiBird;
 
     public float FlapForce => _birdMovementData.FlapForce;
 
@@ -45,16 +46,19 @@ namespace LNE.Birds
       _view = GetComponent<BirdMovementView>();
       _collider = GetComponent<GameBoxCollider>();
       _model = new BirdMovementModel();
+      _aiBird = GetComponent<AIBird>();
     }
 
     private void OnEnable()
     {
       _playerInputAction.BirdMovement.Flap.performed += ctx => HandleFlap(ctx);
+      _gameCoreManager.OnChangePlayMode += HandleOnChangePlayMode;
     }
 
     private void OnDisable()
     {
       _playerInputAction.BirdMovement.Flap.performed -= ctx => HandleFlap(ctx);
+      _gameCoreManager.OnChangePlayMode -= HandleOnChangePlayMode;
     }
 
     void Update()
@@ -133,10 +137,28 @@ namespace LNE.Birds
       return false;
     }
 
+    private void HandleOnChangePlayMode(bool isAIPlayMode)
+    {
+      if (isAIPlayMode)
+      {
+        _aiBird.enabled = true;
+      }
+      else
+      {
+        _aiBird.enabled = false;
+      }
+    }
+
     private void HandleFlap(
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
+      if (_gameCoreManager.IsAIPlayMode)
+      {
+        _gameCoreManager.ShowAIModeMessage();
+        return;
+      }
+
       if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsPlayerDead)
       {
         return;
