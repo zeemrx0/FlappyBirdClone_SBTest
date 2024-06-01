@@ -1,5 +1,6 @@
 using LNE.Colliders;
 using LNE.Core;
+using LNE.Grounds;
 using LNE.Inputs;
 using LNE.Pipes;
 using UnityEngine;
@@ -23,6 +24,9 @@ namespace LNE.Birds
 
     [SerializeField]
     private PipeSpawner _pipeSpawner;
+
+    [SerializeField]
+    private Ground _ground;
 
     private GameOverManager _gameOverManager;
     private PlayerInputManager _playerInputManager;
@@ -62,8 +66,21 @@ namespace LNE.Birds
 
     void Update()
     {
-      _verticalSpeed += _gravity * _mass * Time.deltaTime;
+      ApplyGravity();
+
+      if (_gameOverManager.IsGameOver)
+      {
+        return;
+      }
+
       _view.Flap(_verticalSpeed, _rotateSpeed);
+
+      if (_collider.IsCollidingWith(_ground.GetComponent<GameBoxCollider>()))
+      {
+        _verticalSpeed = 0f;
+        _gameOverManager.GameOver();
+        return;
+      }
 
       foreach (PipePair pipePair in _pipeSpawner.IncomingPipePairs)
       {
@@ -72,9 +89,15 @@ namespace LNE.Birds
           if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
           {
             _gameOverManager.GameOver();
+            return;
           }
         }
       }
+    }
+
+    private void ApplyGravity()
+    {
+      _verticalSpeed += _gravity * _mass * Time.deltaTime;
     }
 
     private void Flap()
@@ -86,6 +109,11 @@ namespace LNE.Birds
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
+      if (_gameOverManager.IsGameOver)
+      {
+        return;
+      }
+
       Flap();
     }
   }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LNE.Core;
 using UnityEngine;
 using Zenject;
 
@@ -30,18 +31,28 @@ namespace LNE.Pipes
     [SerializeField]
     private float _maxSpaceBetweenPipes = 25.3f;
 
-    private DiContainer _container;
+    private DiContainer _diContainer;
+    private GameOverManager _gameOverManager;
 
     private float _timeUntilNextSpawn = 0f;
 
     [Inject]
-    public void Construct(DiContainer container)
+    public void Construct(
+      DiContainer container,
+      GameOverManager gameOverManager
+    )
     {
-      _container = container;
+      _diContainer = container;
+      _gameOverManager = gameOverManager;
     }
 
     void Update()
     {
+      if (_gameOverManager.IsGameOver)
+      {
+        return;
+      }
+
       _timeUntilNextSpawn -= Time.deltaTime;
 
       if (_timeUntilNextSpawn <= 0)
@@ -53,7 +64,7 @@ namespace LNE.Pipes
         _timeUntilNextSpawn = spawnInterval;
 
         float randomY = Random.Range(_minSpawnY, _maxSpawnY);
-        PipePair pipePair = _container
+        PipePair pipePair = _diContainer
           .InstantiatePrefab(_pipePairPrefab)
           .GetComponent<PipePair>();
 

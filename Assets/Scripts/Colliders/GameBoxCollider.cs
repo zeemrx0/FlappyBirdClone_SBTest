@@ -41,10 +41,24 @@ namespace LNE.Colliders
         collider.transform.position.y + collider.Offset.y + collider.Size.y / 2
       );
 
-      return thisMin.x < otherMax.x
+      bool isColliding =
+        thisMin.x < otherMax.x
         && thisMax.x > otherMin.x
         && thisMin.y < otherMax.y
         && thisMax.y > otherMin.y;
+
+      if (isColliding)
+      {
+        // Stop the object at the previous position
+        transform.position = _previousPosition;
+      }
+      else
+      {
+        // Update the previous position if not colliding
+        _previousPosition = transform.position;
+      }
+
+      return isColliding;
     }
 
     private void OnDrawGizmos()
