@@ -8,6 +8,7 @@ namespace LNE.Colliders
       GameCollider collider,
       bool isTrigger = false
     );
+
     public abstract bool IsCollidingWithBoxCollider(
       GameBoxCollider collider,
       bool isTrigger = false

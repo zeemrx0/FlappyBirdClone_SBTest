@@ -1459,13 +1459,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fae96618aa934164b3e6a434614c897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flapForce: 18
-  _gravity: -9.8
-  _mass: 8
-  _rotateSpeed: 1
+  _birdMovementData: {fileID: 11400000, guid: 2540238a39da74982b5cb4565879532a, type: 2}
   _pipeSpawner: {fileID: 913703296}
   _ground: {fileID: 719148373}
-  _flapCooldown: 0.1
 --- !u!114 &1059909720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1504,8 +1500,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57155d345e45043e99d2c4babae821b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pipeSpawner: {fileID: 913703296}
   _aiBirdData: {fileID: 11400000, guid: c3bf7e4d239ca4acf9f8424de2d8c0e4, type: 2}
+  _pipeSpawner: {fileID: 913703296}
 --- !u!1 &1245496389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1695,6 +1691,7 @@ GameObject:
   - component: {fileID: 1331431698}
   - component: {fileID: 1331431700}
   - component: {fileID: 1331431699}
+  - component: {fileID: 1331431701}
   m_Layer: 0
   m_Name: GameCoreManager
   m_TagString: Untagged
@@ -1729,10 +1726,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62c51844f4a848bb990ca8601b8e22e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameOverCanvas: {fileID: 738504106}
-  _gameStartCanvas: {fileID: 1245496393}
-  _infoCanvas: {fileID: 246162540}
-  _pointsText: {fileID: 1742765774}
 --- !u!114 &1331431700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1745,6 +1738,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c77f980dc8d4228bcf14ee3542a544, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1331431701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331431697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e9b369f3c79f41a4acbba9d5e372ba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameOverCanvas: {fileID: 738504106}
+  _gameStartCanvas: {fileID: 1245496393}
+  _infoCanvas: {fileID: 246162540}
 --- !u!1 &1384724539
 GameObject:
   m_ObjectHideFlags: 0

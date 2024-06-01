@@ -10,20 +10,19 @@ namespace LNE.Birds
   public class AIBird : MonoBehaviour
   {
     [SerializeField]
-    private PipeSpawner _pipeSpawner;
-
-    [SerializeField]
     private AIBirdData _aiBirdData;
 
-    private GameCoreManager _gameCoreManager;
+    [SerializeField]
+    private PipeSpawner _pipeSpawner;
 
+    private GameCorePresenter _gameCoreManager;
     private BirdMovementPresenter _birdMovementPresenter;
     private GameBoxCollider _collider;
     private float _heightDifference = 0f;
     private float _timeUntilNextFlap = 0f;
 
     [Inject]
-    private void Construct(GameCoreManager gameCoreManager)
+    private void Construct(GameCorePresenter gameCoreManager)
     {
       _gameCoreManager = gameCoreManager;
     }
@@ -72,11 +71,11 @@ namespace LNE.Birds
           if (_birdMovementPresenter.TryFlap())
           {
             _timeUntilNextFlap = Math.Clamp(
-              _aiBirdData.FlapCooldownCoefficient
+              (_aiBirdData.FlapCooldownCoefficient/1000)
                 * _birdMovementPresenter.FlapForce
                 / _heightDifference,
               0f,
-              0.1f
+              _aiBirdData.MaxFlapCooldown
             );
             return true;
           }
