@@ -1,5 +1,7 @@
 using LNE.Colliders;
+using LNE.Core;
 using LNE.Inputs;
+using LNE.Pipes;
 using UnityEngine;
 using Zenject;
 
@@ -20,18 +22,23 @@ namespace LNE.Birds
     private float _rotateSpeed = 1f;
 
     [SerializeField]
-    private GameObject _pipePairsContainer;
+    private PipeSpawner _pipeSpawner;
 
+    private GameOverManager _gameOverManager;
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
     private GameBoxCollider _collider;
-    
+
     private float _verticalSpeed = 0f;
 
     [Inject]
-    private void Construct(PlayerInputManager playerInputManager)
+    private void Construct(
+      GameOverManager gameOverManager,
+      PlayerInputManager playerInputManager
+    )
     {
+      _gameOverManager = gameOverManager;
       _playerInputManager = playerInputManager;
       _playerInputManager.Init();
       _playerInputAction = _playerInputManager.PlayerInputAction;
@@ -58,13 +65,13 @@ namespace LNE.Birds
       _verticalSpeed += _gravity * _mass * Time.deltaTime;
       _view.Flap(_verticalSpeed, _rotateSpeed);
 
-      foreach (Transform pipePair in _pipePairsContainer.transform)
+      foreach (PipePair pipePair in _pipeSpawner.IncomingPipePairs)
       {
-        foreach (Transform pipe in pipePair)
+        foreach (Transform pipe in pipePair.transform)
         {
           if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
           {
-            Debug.Log("Game Over!");
+            _gameOverManager.GameOver();
           }
         }
       }

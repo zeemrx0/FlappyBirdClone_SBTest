@@ -1,11 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace LNE.Pipes
 {
   public class PipeSpawner : MonoBehaviour
   {
+    public List<PipePair> IncomingPipePairs { get; private set; } =
+      new List<PipePair>();
+
     [SerializeField]
-    private PipePair _pipePrefab;
+    private PipePair _pipePairPrefab;
 
     [SerializeField]
     private float _minSpawnInterval = 1.5f;
@@ -25,7 +30,15 @@ namespace LNE.Pipes
     [SerializeField]
     private float _maxSpaceBetweenPipes = 25.3f;
 
+    private DiContainer _container;
+
     private float _timeUntilNextSpawn = 0f;
+
+    [Inject]
+    public void Construct(DiContainer container)
+    {
+      _container = container;
+    }
 
     void Update()
     {
@@ -40,21 +53,25 @@ namespace LNE.Pipes
         _timeUntilNextSpawn = spawnInterval;
 
         float randomY = Random.Range(_minSpawnY, _maxSpawnY);
-        PipePair pipePair = Instantiate(
-          _pipePrefab,
-          new Vector3(
-            transform.position.x,
-            transform.position.y + randomY,
-            transform.position.z
-          ),
-          Quaternion.identity,
-          transform
+        PipePair pipePair = _container
+          .InstantiatePrefab(_pipePairPrefab)
+          .GetComponent<PipePair>();
+
+        pipePair.transform.position = new Vector3(
+          transform.position.x,
+          transform.position.y + randomY,
+          transform.position.z
         );
+
+        pipePair.transform.SetParent(transform);
+
+        IncomingPipePairs.Add(pipePair);
 
         float randomSpaceBetweenPipes = Random.Range(
           _minSpaceBetweenPipes,
           _maxSpaceBetweenPipes
         );
+
         pipePair.SetSpaceBetween(randomSpaceBetweenPipes);
       }
     }
