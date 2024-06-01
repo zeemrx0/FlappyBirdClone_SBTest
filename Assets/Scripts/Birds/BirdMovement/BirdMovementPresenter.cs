@@ -4,6 +4,7 @@ using LNE.Grounds;
 using LNE.Inputs;
 using LNE.Pipes;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 
 namespace LNE.Birds
@@ -155,7 +156,11 @@ namespace LNE.Birds
     {
       if (_gameCoreManager.IsAIPlayMode)
       {
-        _gameCoreManager.ShowAIModeMessage();
+        Debug.Log(EventSystem.current.IsPointerOverGameObject());
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+          _gameCoreManager.ShowAIModeMessage();
+        }
         return;
       }
 

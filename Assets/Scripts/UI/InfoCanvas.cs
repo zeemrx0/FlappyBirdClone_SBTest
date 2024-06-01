@@ -7,7 +7,7 @@ namespace LNE.UI
   public class InfoCanvas : MonoBehaviour
   {
     [SerializeField]
-    private TextMeshProUGUI _pointsText;
+    private TextMeshProUGUI _scoreText;
 
     [SerializeField]
     private ToggleButton _exitAIPlayModeButton;
@@ -25,9 +25,9 @@ namespace LNE.UI
       gameObject.SetActive(false);
     }
 
-    public void SetPoints(int points)
+    public void SetScore(int score)
     {
-      _pointsText.text = points.ToString();
+      _scoreText.text = score.ToString();
     }
 
     public void SetExitAIPlayModeButtonState(bool isOn)

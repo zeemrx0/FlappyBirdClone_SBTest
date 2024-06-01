@@ -447,7 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2de767c02e4c4ff6aab43a90f6c4354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointsText: {fileID: 1742765774}
+  _scoreText: {fileID: 1742765774}
   _exitAIPlayModeButton: {fileID: 1553980829}
   _AIModeMessage: {fileID: 1659066760}
 --- !u!1 &315596014
@@ -1216,7 +1216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8d4a64c6ad764ff38f64a79008d8217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointsText: {fileID: 1384724542}
+  _scoreText: {fileID: 1384724542}
 --- !u!1 &796764957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,7 +1906,7 @@ GameObject:
   - component: {fileID: 1384724542}
   - component: {fileID: 1384724541}
   m_Layer: 5
-  m_Name: Text_Points
+  m_Name: Text_Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2340,8 +2340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbe807c89ab2848ea871f1fb962d57d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fadeInDuration: 0.5
-  _fadeOutDuration: 0.5
+  _fadeInDuration: 0.1
+  _fadeOutDuration: 0.1
 --- !u!1 &1742765772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2355,7 +2355,7 @@ GameObject:
   - component: {fileID: 1742765774}
   - component: {fileID: 1742765776}
   m_Layer: 5
-  m_Name: Text_Points
+  m_Name: Text_Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

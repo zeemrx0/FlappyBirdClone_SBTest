@@ -12,8 +12,8 @@ namespace LNE.Core
     public bool IsGameOver { get; private set; } = false;
     public bool IsGameStarted { get; private set; } = false;
     public bool IsPlayerDead { get; private set; } = false;
-    public int Points { get; private set; } = 0;
     public bool IsAIPlayMode { get; private set; } = false;
+    public ScoreModel ScoreModel { get; private set; } = new ScoreModel();
 
     [SerializeField]
     private GameOverCanvas _gameOverCanvas;
@@ -43,7 +43,7 @@ namespace LNE.Core
       IsAIPlayMode = isAIPlayMode;
       _gameStartCanvas.Hide();
       _infoCanvas.Show();
-      _infoCanvas.SetPoints(Points);
+      _infoCanvas.SetScore(ScoreModel.Score);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
@@ -57,7 +57,7 @@ namespace LNE.Core
       IsGameOver = true;
       TriggerPlayerDead();
       _gameOverCanvas.Show();
-      _gameOverCanvas.SetPoints(Points);
+      _gameOverCanvas.SetScore(ScoreModel.Score);
       _infoCanvas.Hide();
     }
 
@@ -85,8 +85,8 @@ namespace LNE.Core
 
     public void AddPoint()
     {
-      Points++;
-      _infoCanvas.SetPoints(Points);
+      ScoreModel.Score++;
+      _infoCanvas.SetScore(ScoreModel.Score);
     }
 
     public void ShowAIModeMessage()
