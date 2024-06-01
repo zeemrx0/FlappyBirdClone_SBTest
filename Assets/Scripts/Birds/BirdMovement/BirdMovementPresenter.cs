@@ -28,21 +28,27 @@ namespace LNE.Birds
     [SerializeField]
     private Ground _ground;
 
-    private GameCoreManager _gameOverManager;
+    [SerializeField]
+    private float _flapCooldown = 0.2f;
+
+    public float FlapForce => _flapForce;
+
+    private GameCoreManager _gameCoreManager;
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
     private GameBoxCollider _collider;
 
     private float _verticalSpeed = 0f;
+    private float _timeUntilNextFlap = 0f;
 
     [Inject]
     private void Construct(
-      GameCoreManager gameOverManager,
+      GameCoreManager gameCoreManager,
       PlayerInputManager playerInputManager
     )
     {
-      _gameOverManager = gameOverManager;
+      _gameCoreManager = gameCoreManager;
       _playerInputManager = playerInputManager;
       _playerInputManager.Init();
       _playerInputAction = _playerInputManager.PlayerInputAction;
@@ -66,38 +72,43 @@ namespace LNE.Birds
 
     void Update()
     {
-      if (!_gameOverManager.IsGameStarted)
-      {
-        return;
-      }
-
-      if (_gameOverManager.IsGameOver)
+      if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsGameOver)
       {
         return;
       }
 
       ApplyGravity();
 
-      _view.Flap(_verticalSpeed, _rotateSpeed);
+      _view.Flap(_verticalSpeed);
       _view.Rotate(_verticalSpeed, _rotateSpeed);
 
       CheckIsCollidingWithGround();
 
-      if (_gameOverManager.IsPlayerDead)
+      if (_gameCoreManager.IsPlayerDead)
       {
         return;
       }
 
       CheckIsCollidingWithPipe();
+
+      if (_timeUntilNextFlap > 0f)
+      {
+        _timeUntilNextFlap -= Time.deltaTime;
+      }
     }
 
     private void CheckIsCollidingWithPipe()
     {
+      if (_pipeSpawner.FirstPipePair == null)
+      {
+        return;
+      }
+
       foreach (Transform pipe in _pipeSpawner.FirstPipePair.transform)
       {
         if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
         {
-          _gameOverManager.TriggerPlayerDead();
+          _gameCoreManager.TriggerPlayerDead();
           return;
         }
       }
@@ -108,7 +119,7 @@ namespace LNE.Birds
       if (_collider.IsCollidingWith(_ground.GetComponent<GameBoxCollider>()))
       {
         _verticalSpeed = 0f;
-        _gameOverManager.TriggerGameOver();
+        _gameCoreManager.TriggerGameOver();
         return;
       }
     }
@@ -118,26 +129,38 @@ namespace LNE.Birds
       _verticalSpeed += _gravity * _mass * Time.deltaTime;
     }
 
-    private void Flap()
+    public void Flap()
     {
       _verticalSpeed = _flapForce;
+    }
+
+    public bool TryFlap()
+    {
+      if (_timeUntilNextFlap <= 0f)
+      {
+        Flap();
+        _timeUntilNextFlap = _flapCooldown;
+        return true;
+      }
+
+      return false;
     }
 
     private void HandleFlap(
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
-      if (!_gameOverManager.IsGameStarted)
+      if (!_gameCoreManager.IsGameStarted)
       {
         return;
       }
 
-      if (_gameOverManager.IsPlayerDead)
+      if (_gameCoreManager.IsPlayerDead)
       {
         return;
       }
 
-      Flap();
+      TryFlap();
     }
   }
 }
