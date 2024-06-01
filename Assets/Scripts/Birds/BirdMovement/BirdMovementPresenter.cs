@@ -93,15 +93,12 @@ namespace LNE.Birds
 
     private void CheckIsCollidingWithPipe()
     {
-      foreach (PipePair pipePair in _pipeSpawner.IncomingPipePairs)
+      foreach (Transform pipe in _pipeSpawner.FirstPipePair.transform)
       {
-        foreach (Transform pipe in pipePair.transform)
+        if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
         {
-          if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
-          {
-            _gameOverManager.TriggerPlayerDead();
-            return;
-          }
+          _gameOverManager.TriggerPlayerDead();
+          return;
         }
       }
     }

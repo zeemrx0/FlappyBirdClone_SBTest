@@ -1,4 +1,6 @@
+using LNE.UI;
 using LNE.Utilities.Constants;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -9,12 +11,19 @@ namespace LNE.Core
     public bool IsGameOver { get; private set; } = false;
     public bool IsGameStarted { get; private set; } = false;
     public bool IsPlayerDead { get; private set; } = false;
+    public int Points { get; private set; } = 0;
 
     [SerializeField]
-    private Canvas _gameOverCanvas;
+    private GameOverCanvas _gameOverCanvas;
 
     [SerializeField]
     private Canvas _gameStartCanvas;
+
+    [SerializeField]
+    private InfoCanvas _infoCanvas;
+
+    [SerializeField]
+    private TextMeshProUGUI _pointsText;
 
     private ZenjectSceneLoader _zenjectSceneLoader;
 
@@ -28,6 +37,7 @@ namespace LNE.Core
     {
       IsGameStarted = true;
       HideGameStartCanvas();
+      ShowInfoCanvas();
     }
 
     public void TriggerGameOver()
@@ -35,11 +45,18 @@ namespace LNE.Core
       IsGameOver = true;
       TriggerPlayerDead();
       ShowGameOverCanvas();
+      HideInfoCanvas();
     }
 
     public void TriggerPlayerDead()
     {
       IsPlayerDead = true;
+    }
+
+    public void AddPoint()
+    {
+      Points++;
+      _infoCanvas.SetPoints(Points);
     }
 
     public void Restart()
@@ -50,11 +67,23 @@ namespace LNE.Core
     public void ShowGameOverCanvas()
     {
       _gameOverCanvas.gameObject.SetActive(true);
+      _gameOverCanvas.SetPoints(Points);
     }
 
     public void HideGameStartCanvas()
     {
       _gameStartCanvas.gameObject.SetActive(false);
+    }
+
+    public void ShowInfoCanvas()
+    {
+      _infoCanvas.gameObject.SetActive(true);
+      _infoCanvas.SetPoints(Points);
+    }
+
+    public void HideInfoCanvas()
+    {
+      _infoCanvas.gameObject.SetActive(false);
     }
   }
 }

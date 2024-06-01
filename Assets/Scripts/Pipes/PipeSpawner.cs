@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using LNE.Colliders;
 using LNE.Core;
+using LNE.Utilities.Constants;
 using UnityEngine;
 using Zenject;
 
@@ -9,6 +11,9 @@ namespace LNE.Pipes
   {
     public List<PipePair> IncomingPipePairs { get; private set; } =
       new List<PipePair>();
+
+    public PipePair FirstPipePair =>
+      IncomingPipePairs.Count > 0 ? IncomingPipePairs[0] : null;
 
     [SerializeField]
     private PipePair _pipePairPrefab;
@@ -34,6 +39,7 @@ namespace LNE.Pipes
     private DiContainer _diContainer;
     private GameCoreManager _gameOverManager;
 
+    private GameBoxCollider _playerCollider;
     private float _timeUntilNextSpawn = 0f;
 
     [Inject]
@@ -44,6 +50,13 @@ namespace LNE.Pipes
     {
       _diContainer = container;
       _gameOverManager = gameOverManager;
+    }
+
+    private void Start()
+    {
+      _playerCollider = GameObject
+        .FindWithTag(TagName.Player)
+        .GetComponent<GameBoxCollider>();
     }
 
     void Update()
@@ -62,34 +75,67 @@ namespace LNE.Pipes
 
       if (_timeUntilNextSpawn <= 0)
       {
-        float spawnInterval = Random.Range(
-          _minSpawnInterval,
-          _maxSpawnInterval
-        );
-        _timeUntilNextSpawn = spawnInterval;
-
-        float randomY = Random.Range(_minSpawnY, _maxSpawnY);
-        PipePair pipePair = _diContainer
-          .InstantiatePrefab(_pipePairPrefab)
-          .GetComponent<PipePair>();
-
-        pipePair.transform.position = new Vector3(
-          transform.position.x,
-          transform.position.y + randomY,
-          transform.position.z
-        );
-
-        pipePair.transform.SetParent(transform);
-
-        IncomingPipePairs.Add(pipePair);
-
-        float randomSpaceBetweenPipes = Random.Range(
-          _minSpaceBetweenPipes,
-          _maxSpaceBetweenPipes
-        );
-
-        pipePair.SetSpaceBetween(randomSpaceBetweenPipes);
+        SpawnPipePair();
       }
+
+      if (IsFirstPipePairPassedPlayer())
+      {
+        _gameOverManager.AddPoint();
+      }
+    }
+
+    private bool IsFirstPipePairPassedPlayer()
+    {
+      if (FirstPipePair == null)
+      {
+        return false;
+      }
+
+      // Get one of the colliders from the first pipe pair
+      GameBoxCollider firstPipePairCollider = FirstPipePair.transform
+        .GetChild(0)
+        .GetComponent<GameBoxCollider>();
+
+      // Check if the player has passed the first pipe pair
+      if (
+        firstPipePairCollider.transform.position.x
+          + firstPipePairCollider.Size.x / 2
+        < _playerCollider.transform.position.x - _playerCollider.Size.x / 2
+      )
+      {
+        IncomingPipePairs.RemoveAt(0);
+        return true;
+      }
+
+      return false;
+    }
+
+    private void SpawnPipePair()
+    {
+      float spawnInterval = Random.Range(_minSpawnInterval, _maxSpawnInterval);
+      _timeUntilNextSpawn = spawnInterval;
+
+      float randomY = Random.Range(_minSpawnY, _maxSpawnY);
+      PipePair pipePair = _diContainer
+        .InstantiatePrefab(_pipePairPrefab)
+        .GetComponent<PipePair>();
+
+      pipePair.transform.position = new Vector3(
+        transform.position.x,
+        transform.position.y + randomY,
+        transform.position.z
+      );
+
+      pipePair.transform.SetParent(transform);
+
+      IncomingPipePairs.Add(pipePair);
+
+      float randomSpaceBetweenPipes = Random.Range(
+        _minSpaceBetweenPipes,
+        _maxSpaceBetweenPipes
+      );
+
+      pipePair.SetSpaceBetween(randomSpaceBetweenPipes);
     }
   }
 }
