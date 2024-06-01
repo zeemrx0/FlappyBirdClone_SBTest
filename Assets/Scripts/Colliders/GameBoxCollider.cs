@@ -10,7 +10,10 @@ namespace LNE.Colliders
     [field: SerializeField]
     public Vector2 Offset { get; set; } = Vector2.zero;
 
-    public override bool IsCollidingWith(GameCollider collider)
+    public override bool IsCollidingWith(
+      GameCollider collider,
+      bool isTrigger = false
+    )
     {
       switch (collider)
       {
@@ -21,7 +24,10 @@ namespace LNE.Colliders
       return false;
     }
 
-    public override bool IsCollidingWithBoxCollider(GameBoxCollider collider)
+    public override bool IsCollidingWithBoxCollider(
+      GameBoxCollider collider,
+      bool isTrigger = false
+    )
     {
       var thisMin = new Vector2(
         transform.position.x + Offset.x - Size.x / 2,
@@ -47,14 +53,12 @@ namespace LNE.Colliders
         && thisMin.y < otherMax.y
         && thisMax.y > otherMin.y;
 
-      if (isColliding)
+      if (isColliding && !isTrigger)
       {
-        // Stop the object at the previous position
         transform.position = _previousPosition;
       }
       else
       {
-        // Update the previous position if not colliding
         _previousPosition = transform.position;
       }
 

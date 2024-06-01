@@ -7,6 +7,10 @@ namespace LNE.Birds
     public void Flap(float verticalSpeed, float rotateSpeed)
     {
       transform.position += Vector3.up * verticalSpeed * Time.deltaTime;
+    }
+
+    public void Rotate(float verticalSpeed, float rotateSpeed)
+    {
       transform.rotation = Quaternion.Euler(0, 0, verticalSpeed * rotateSpeed);
     }
   }

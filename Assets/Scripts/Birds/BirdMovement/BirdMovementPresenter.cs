@@ -28,7 +28,7 @@ namespace LNE.Birds
     [SerializeField]
     private Ground _ground;
 
-    private GameOverManager _gameOverManager;
+    private GameCoreManager _gameOverManager;
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
@@ -38,7 +38,7 @@ namespace LNE.Birds
 
     [Inject]
     private void Construct(
-      GameOverManager gameOverManager,
+      GameCoreManager gameOverManager,
       PlayerInputManager playerInputManager
     )
     {
@@ -66,32 +66,53 @@ namespace LNE.Birds
 
     void Update()
     {
-      ApplyGravity();
+      if (!_gameOverManager.IsGameStarted)
+      {
+        return;
+      }
 
       if (_gameOverManager.IsGameOver)
       {
         return;
       }
 
-      _view.Flap(_verticalSpeed, _rotateSpeed);
+      ApplyGravity();
 
-      if (_collider.IsCollidingWith(_ground.GetComponent<GameBoxCollider>()))
+      _view.Flap(_verticalSpeed, _rotateSpeed);
+      _view.Rotate(_verticalSpeed, _rotateSpeed);
+
+      CheckIsCollidingWithGround();
+
+      if (_gameOverManager.IsPlayerDead)
       {
-        _verticalSpeed = 0f;
-        _gameOverManager.GameOver();
         return;
       }
 
+      CheckIsCollidingWithPipe();
+    }
+
+    private void CheckIsCollidingWithPipe()
+    {
       foreach (PipePair pipePair in _pipeSpawner.IncomingPipePairs)
       {
         foreach (Transform pipe in pipePair.transform)
         {
           if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
           {
-            _gameOverManager.GameOver();
+            _gameOverManager.TriggerPlayerDead();
             return;
           }
         }
+      }
+    }
+
+    private void CheckIsCollidingWithGround()
+    {
+      if (_collider.IsCollidingWith(_ground.GetComponent<GameBoxCollider>()))
+      {
+        _verticalSpeed = 0f;
+        _gameOverManager.TriggerGameOver();
+        return;
       }
     }
 
@@ -109,7 +130,12 @@ namespace LNE.Birds
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
-      if (_gameOverManager.IsGameOver)
+      if (!_gameOverManager.IsGameStarted)
+      {
+        return;
+      }
+
+      if (_gameOverManager.IsPlayerDead)
       {
         return;
       }

@@ -32,14 +32,14 @@ namespace LNE.Pipes
     private float _maxSpaceBetweenPipes = 25.3f;
 
     private DiContainer _diContainer;
-    private GameOverManager _gameOverManager;
+    private GameCoreManager _gameOverManager;
 
     private float _timeUntilNextSpawn = 0f;
 
     [Inject]
     public void Construct(
       DiContainer container,
-      GameOverManager gameOverManager
+      GameCoreManager gameOverManager
     )
     {
       _diContainer = container;
@@ -48,7 +48,12 @@ namespace LNE.Pipes
 
     void Update()
     {
-      if (_gameOverManager.IsGameOver)
+      if (!_gameOverManager.IsGameStarted)
+      {
+        return;
+      }
+
+      if (_gameOverManager.IsPlayerDead)
       {
         return;
       }
