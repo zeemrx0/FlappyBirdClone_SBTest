@@ -35,6 +35,11 @@ namespace LNE.Core
 
     public void StartGame()
     {
+      if (IsGameStarted)
+      {
+        return;
+      }
+
       IsGameStarted = true;
       HideGameStartCanvas();
       ShowInfoCanvas();
@@ -42,6 +47,11 @@ namespace LNE.Core
 
     public void TriggerGameOver()
     {
+      if (IsGameOver)
+      {
+        return;
+      }
+
       IsGameOver = true;
       TriggerPlayerDead();
       ShowGameOverCanvas();
@@ -50,6 +60,11 @@ namespace LNE.Core
 
     public void TriggerPlayerDead()
     {
+      if (IsPlayerDead)
+      {
+        return;
+      }
+
       IsPlayerDead = true;
     }
 

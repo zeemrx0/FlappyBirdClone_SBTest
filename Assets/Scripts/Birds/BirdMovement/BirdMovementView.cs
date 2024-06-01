@@ -4,7 +4,7 @@ namespace LNE.Birds
 {
   public class BirdMovementView : MonoBehaviour
   {
-    public void Flap(float verticalSpeed, float rotateSpeed)
+    public void Flap(float verticalSpeed)
     {
       transform.position += Vector3.up * verticalSpeed * Time.deltaTime;
     }

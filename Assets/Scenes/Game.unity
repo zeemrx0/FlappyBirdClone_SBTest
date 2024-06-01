@@ -1423,6 +1423,7 @@ GameObject:
   - component: {fileID: 1059909719}
   - component: {fileID: 1059909720}
   - component: {fileID: 1059909721}
+  - component: {fileID: 1059909722}
   m_Layer: 0
   m_Name: PlayerBird
   m_TagString: Player
@@ -1464,6 +1465,7 @@ MonoBehaviour:
   _rotateSpeed: 1
   _pipeSpawner: {fileID: 913703296}
   _ground: {fileID: 719148373}
+  _flapCooldown: 0.1
 --- !u!114 &1059909720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1490,6 +1492,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Size>k__BackingField: {x: 1.9, y: 1.5}
   <Offset>k__BackingField: {x: 0, y: 0}
+--- !u!114 &1059909722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059909717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57155d345e45043e99d2c4babae821b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pipeSpawner: {fileID: 913703296}
+  _aiBirdData: {fileID: 11400000, guid: c3bf7e4d239ca4acf9f8424de2d8c0e4, type: 2}
 --- !u!1 &1245496389
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,22 +9,17 @@ namespace LNE.Pipes
     [SerializeField]
     private float _speed = 1f;
 
-    private GameCoreManager _gameOverManager;
+    private GameCoreManager _gameCoreManager;
 
     [Inject]
-    private void Construct(GameCoreManager gameOverManager)
+    private void Construct(GameCoreManager gameCoreManager)
     {
-      _gameOverManager = gameOverManager;
+      _gameCoreManager = gameCoreManager;
     }
 
     void Update()
     {
-      if (!_gameOverManager.IsGameStarted)
-      {
-        return;
-      }
-
-      if (_gameOverManager.IsPlayerDead)
+      if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsPlayerDead)
       {
         return;
       }
