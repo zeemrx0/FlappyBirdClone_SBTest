@@ -37,7 +37,7 @@ namespace LNE.Pipes
     private float _maxSpaceBetweenPipes = 25.3f;
 
     private DiContainer _diContainer;
-    private GameCoreManager _gameCoreManager;
+    private GameCorePresenter _gameCoreManager;
 
     private GameBoxCollider _playerCollider;
     private float _timeUntilNextSpawn = 0f;
@@ -45,7 +45,7 @@ namespace LNE.Pipes
     [Inject]
     public void Construct(
       DiContainer container,
-      GameCoreManager gameCoreManager
+      GameCorePresenter gameCoreManager
     )
     {
       _diContainer = container;

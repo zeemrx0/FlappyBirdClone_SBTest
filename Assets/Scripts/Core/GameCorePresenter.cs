@@ -1,36 +1,28 @@
-using LNE.UI;
 using LNE.Utilities.Constants;
-using TMPro;
 using UnityEngine;
 using Zenject;
 
 namespace LNE.Core
 {
-  public class GameCoreManager : MonoBehaviour
+  public class GameCorePresenter : MonoBehaviour
   {
     public bool IsGameOver { get; private set; } = false;
     public bool IsGameStarted { get; private set; } = false;
     public bool IsPlayerDead { get; private set; } = false;
     public int Points { get; private set; } = 0;
 
-    [SerializeField]
-    private GameOverCanvas _gameOverCanvas;
-
-    [SerializeField]
-    private Canvas _gameStartCanvas;
-
-    [SerializeField]
-    private InfoCanvas _infoCanvas;
-
-    [SerializeField]
-    private TextMeshProUGUI _pointsText;
-
     private ZenjectSceneLoader _zenjectSceneLoader;
+    private GameCoreView _view;
 
     [Inject]
     private void Construct(ZenjectSceneLoader zenjectSceneLoader)
     {
       _zenjectSceneLoader = zenjectSceneLoader;
+    }
+
+    private void Awake()
+    {
+      _view = GetComponent<GameCoreView>();
     }
 
     public void StartGame()
@@ -68,37 +60,36 @@ namespace LNE.Core
       IsPlayerDead = true;
     }
 
-    public void AddPoint()
-    {
-      Points++;
-      _infoCanvas.SetPoints(Points);
-    }
-
     public void Restart()
     {
       _zenjectSceneLoader.LoadScene(SceneName.Game);
     }
 
+    public void AddPoint()
+    {
+      Points++;
+      _view.SetPointsInfoCanvas(Points);
+    }
+
     public void ShowGameOverCanvas()
     {
-      _gameOverCanvas.gameObject.SetActive(true);
-      _gameOverCanvas.SetPoints(Points);
+      _view.ShowGameOverCanvas(Points);
     }
 
     public void HideGameStartCanvas()
     {
-      _gameStartCanvas.gameObject.SetActive(false);
+      _view.HideGameStartCanvas();
     }
 
     public void ShowInfoCanvas()
     {
-      _infoCanvas.gameObject.SetActive(true);
-      _infoCanvas.SetPoints(Points);
+      _view.ShowInfoCanvas();
+      _view.SetPointsInfoCanvas(Points);
     }
 
     public void HideInfoCanvas()
     {
-      _infoCanvas.gameObject.SetActive(false);
+      _view.HideInfoCanvas();
     }
   }
 }

@@ -15,13 +15,11 @@ namespace LNE.Colliders
       bool isTrigger = false
     )
     {
-      switch (collider)
+      return collider switch
       {
-        case GameBoxCollider boxCollider:
-          return IsCollidingWithBoxCollider(boxCollider);
-      }
-
-      return false;
+        GameBoxCollider boxCollider => IsCollidingWithBoxCollider(boxCollider),
+        _ => false,
+      };
     }
 
     public override bool IsCollidingWithBoxCollider(

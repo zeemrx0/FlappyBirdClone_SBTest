@@ -14,5 +14,8 @@ namespace LNE.Birds
 
     [field: SerializeField]
     public float FlapCooldownCoefficient { get; set; } = 0.0001f;
+
+    [field: SerializeField]
+    public float MaxFlapCooldown { get; set; } = 0.15f;
   }
 }

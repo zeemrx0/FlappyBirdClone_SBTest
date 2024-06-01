@@ -11,16 +11,7 @@ namespace LNE.Birds
   public class BirdMovementPresenter : MonoBehaviour
   {
     [SerializeField]
-    private float _flapForce = 10f;
-
-    [SerializeField]
-    private float _gravity = -9.8f;
-
-    [SerializeField]
-    private float _mass = 1f;
-
-    [SerializeField]
-    private float _rotateSpeed = 1f;
+    private BirdMovementData _birdMovementData;
 
     [SerializeField]
     private PipeSpawner _pipeSpawner;
@@ -28,23 +19,18 @@ namespace LNE.Birds
     [SerializeField]
     private Ground _ground;
 
-    [SerializeField]
-    private float _flapCooldown = 0.2f;
-
-    public float FlapForce => _flapForce;
-
-    private GameCoreManager _gameCoreManager;
+    private GameCorePresenter _gameCoreManager;
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
     private GameBoxCollider _collider;
+    private BirdMovementModel _model;
 
-    private float _verticalSpeed = 0f;
-    private float _timeUntilNextFlap = 0f;
+    public float FlapForce => _birdMovementData.FlapForce;
 
     [Inject]
     private void Construct(
-      GameCoreManager gameCoreManager,
+      GameCorePresenter gameCoreManager,
       PlayerInputManager playerInputManager
     )
     {
@@ -58,6 +44,7 @@ namespace LNE.Birds
     {
       _view = GetComponent<BirdMovementView>();
       _collider = GetComponent<GameBoxCollider>();
+      _model = new BirdMovementModel();
     }
 
     private void OnEnable()
@@ -79,8 +66,7 @@ namespace LNE.Birds
 
       ApplyGravity();
 
-      _view.Flap(_verticalSpeed);
-      _view.Rotate(_verticalSpeed, _rotateSpeed);
+      _view.Flap(_model.VerticalSpeed, _birdMovementData.RotateSpeed);
 
       CheckIsCollidingWithGround();
 
@@ -91,9 +77,9 @@ namespace LNE.Birds
 
       CheckIsCollidingWithPipe();
 
-      if (_timeUntilNextFlap > 0f)
+      if (_model.TimeUntilNextFlap > 0f)
       {
-        _timeUntilNextFlap -= Time.deltaTime;
+        _model.TimeUntilNextFlap -= Time.deltaTime;
       }
     }
 
@@ -118,7 +104,7 @@ namespace LNE.Birds
     {
       if (_collider.IsCollidingWith(_ground.GetComponent<GameBoxCollider>()))
       {
-        _verticalSpeed = 0f;
+        _model.VerticalSpeed = 0f;
         _gameCoreManager.TriggerGameOver();
         return;
       }
@@ -126,20 +112,21 @@ namespace LNE.Birds
 
     private void ApplyGravity()
     {
-      _verticalSpeed += _gravity * _mass * Time.deltaTime;
+      _model.VerticalSpeed +=
+        _birdMovementData.Gravity * _birdMovementData.Mass * Time.deltaTime;
     }
 
     public void Flap()
     {
-      _verticalSpeed = _flapForce;
+      _model.VerticalSpeed = _birdMovementData.FlapForce;
     }
 
     public bool TryFlap()
     {
-      if (_timeUntilNextFlap <= 0f)
+      if (_model.TimeUntilNextFlap <= 0f)
       {
         Flap();
-        _timeUntilNextFlap = _flapCooldown;
+        _model.TimeUntilNextFlap = _birdMovementData.FlapCooldown;
         return true;
       }
 
@@ -150,12 +137,7 @@ namespace LNE.Birds
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
-      if (!_gameCoreManager.IsGameStarted)
-      {
-        return;
-      }
-
-      if (_gameCoreManager.IsPlayerDead)
+      if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsPlayerDead)
       {
         return;
       }
