@@ -25,18 +25,10 @@ namespace LNE.Core
       _gameStartCanvas.gameObject.SetActive(false);
     }
 
-    public void ShowInfoCanvas(int points, bool isAIPlayMode)
+    public void ShowInfoCanvas(int points)
     {
       _infoCanvas.gameObject.SetActive(true);
       _infoCanvas.SetPoints(points);
-      if (isAIPlayMode)
-      {
-        _infoCanvas.ShowExitAIPlayModeButton();
-      }
-      else
-      {
-        _infoCanvas.HideExitAIPlayModeButton();
-      }
     }
 
     public void SetPointsInfoCanvas(int points)
@@ -47,6 +39,11 @@ namespace LNE.Core
     public void HideInfoCanvas()
     {
       _infoCanvas.gameObject.SetActive(false);
+    }
+
+    public void SetExitAIPlayModeButtonState(bool isOn)
+    {
+      _infoCanvas.SetExitAIPlayModeButtonState(isOn);
     }
   }
 }

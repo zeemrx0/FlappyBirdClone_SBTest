@@ -7,7 +7,7 @@ namespace LNE.Core
 {
   public class GameCorePresenter : MonoBehaviour
   {
-    public event Action<bool> OnGameStart;
+    public event Action<bool> OnChangePlayMode;
     public bool IsGameOver { get; private set; } = false;
     public bool IsGameStarted { get; private set; } = false;
     public bool IsPlayerDead { get; private set; } = false;
@@ -39,7 +39,7 @@ namespace LNE.Core
       IsAIPlayMode = isAIPlayMode;
       HideGameStartCanvas();
       ShowInfoCanvas();
-      OnGameStart?.Invoke(IsAIPlayMode);
+      OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
     public void TriggerGameOver()
@@ -53,6 +53,13 @@ namespace LNE.Core
       TriggerPlayerDead();
       ShowGameOverCanvas();
       HideInfoCanvas();
+    }
+
+    public void ToggleIsAIPlayMode()
+    {
+      IsAIPlayMode = !IsAIPlayMode;
+      _view.SetExitAIPlayModeButtonState(IsAIPlayMode);
+      OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
     public void TriggerPlayerDead()
@@ -88,7 +95,7 @@ namespace LNE.Core
 
     public void ShowInfoCanvas()
     {
-      _view.ShowInfoCanvas(Points, IsAIPlayMode);
+      _view.ShowInfoCanvas(Points);
       _view.SetPointsInfoCanvas(Points);
     }
 

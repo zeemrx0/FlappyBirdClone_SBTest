@@ -1,4 +1,3 @@
-using System;
 using LNE.Colliders;
 using LNE.Core;
 using LNE.Grounds;
@@ -53,25 +52,13 @@ namespace LNE.Birds
     private void OnEnable()
     {
       _playerInputAction.BirdMovement.Flap.performed += ctx => HandleFlap(ctx);
-      _gameCoreManager.OnGameStart += HandleGameStart;
-    }
-
-    private void HandleGameStart(bool isAIPlayMode)
-    {
-      if (isAIPlayMode)
-      {
-        _aiBird.enabled = true;
-      }
-      else
-      {
-        _aiBird.enabled = false;
-      }
+      _gameCoreManager.OnChangePlayMode += HandleOnChangePlayMode;
     }
 
     private void OnDisable()
     {
       _playerInputAction.BirdMovement.Flap.performed -= ctx => HandleFlap(ctx);
-      _gameCoreManager.OnGameStart -= HandleGameStart;
+      _gameCoreManager.OnChangePlayMode -= HandleOnChangePlayMode;
     }
 
     void Update()
@@ -148,6 +135,18 @@ namespace LNE.Birds
       }
 
       return false;
+    }
+
+    private void HandleOnChangePlayMode(bool isAIPlayMode)
+    {
+      if (isAIPlayMode)
+      {
+        _aiBird.enabled = true;
+      }
+      else
+      {
+        _aiBird.enabled = false;
+      }
     }
 
     private void HandleFlap(

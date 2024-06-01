@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace LNE.UI
 {
@@ -10,21 +9,16 @@ namespace LNE.UI
     private TextMeshProUGUI _pointsText;
 
     [SerializeField]
-    private Button _exitAIPlayModeButton;
+    private ToggleButton _exitAIPlayModeButton;
 
     public void SetPoints(int points)
     {
       _pointsText.text = points.ToString();
     }
 
-    public void ShowExitAIPlayModeButton()
+    public void SetExitAIPlayModeButtonState(bool isOn)
     {
-      _exitAIPlayModeButton.gameObject.SetActive(true);
-    }
-
-    public void HideExitAIPlayModeButton()
-    {
-      _exitAIPlayModeButton.gameObject.SetActive(false);
+      _exitAIPlayModeButton.SetState(isOn);
     }
   }
 }
