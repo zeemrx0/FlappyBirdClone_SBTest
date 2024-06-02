@@ -94,9 +94,10 @@ namespace LNE.Birds
       {
         if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
         {
-          _gamePlayManager.TriggerPlayerDead();
+          _view.PlayDeadAnimation();
           _view.PlayHitSound();
           _view.PlayFallSound();
+          _gamePlayManager.TriggerPlayerDead();
           return;
         }
       }
@@ -109,11 +110,12 @@ namespace LNE.Birds
         if (_collider.IsCollidingWith(ground.GetComponent<GameBoxCollider>()))
         {
           _model.VerticalSpeed = 0f;
-          _gamePlayManager.TriggerGameOver();
           if (!_gamePlayManager.IsPlayerDead)
           {
+            _view.PlayDeadAnimation();
             _view.PlayHitSound();
           }
+          _gamePlayManager.TriggerGameOver();
           return;
         }
       }
@@ -129,6 +131,7 @@ namespace LNE.Birds
     {
       _model.VerticalSpeed = _birdMovementData.FlapForce;
       _view.PlayFlapSound();
+      _view.PlayFlapAnimation();
     }
 
     public bool TryFlap()

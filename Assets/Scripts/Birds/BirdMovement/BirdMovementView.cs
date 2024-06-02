@@ -1,4 +1,4 @@
-using System.Collections;
+using LNE.Utilities.Constants;
 using UnityEngine;
 
 namespace LNE.Birds
@@ -15,10 +15,12 @@ namespace LNE.Birds
     private AudioClip _fallSound;
 
     private AudioSource _audioSource;
+    private Animator _animator;
 
     private void Awake()
     {
       _audioSource = GetComponent<AudioSource>();
+      _animator = GetComponent<Animator>();
     }
 
     public void Fly(float verticalSpeed, float rotateSpeed)
@@ -42,10 +44,14 @@ namespace LNE.Birds
       _audioSource.PlayOneShot(_fallSound);
     }
 
-    private IEnumerator PlayFallSound(float delay)
+    public void PlayFlapAnimation()
     {
-      yield return new WaitForSeconds(delay);
-      _audioSource.PlayOneShot(_fallSound);
+      _animator.SetTrigger(AnimationParameter.Flap);
+    }
+
+    public void PlayDeadAnimation()
+    {
+      _animator.SetBool(AnimationParameter.IsDead, true);
     }
   }
 }
