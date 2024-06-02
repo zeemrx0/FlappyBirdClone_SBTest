@@ -22,7 +22,7 @@ namespace LNE.Pipes
     private DiContainer _diContainer;
     private GamePlayManager _gamePlayManager;
 
-    private GameBoxCollider _playerCollider;
+    private GameCircleCollider _playerCollider;
     private float _timeUntilNextSpawn = 0f;
     private IObjectPool<PipePair> _pool;
 
@@ -56,7 +56,7 @@ namespace LNE.Pipes
     {
       _playerCollider = GameObject
         .FindWithTag(TagName.Player)
-        .GetComponent<GameBoxCollider>();
+        .GetComponent<GameCircleCollider>();
     }
 
     void Update()
@@ -80,7 +80,7 @@ namespace LNE.Pipes
 
       if (IsFirstPipePairPassedPlayer())
       {
-        _gamePlayManager.AddPoint();
+        _gamePlayManager.IncreaseScore();
       }
     }
 
@@ -100,7 +100,7 @@ namespace LNE.Pipes
       if (
         firstPipePairCollider.transform.position.x
           + firstPipePairCollider.Size.x / 2
-        < _playerCollider.transform.position.x - _playerCollider.Size.x / 2
+        < _playerCollider.transform.position.x - _playerCollider.Radius
       )
       {
         IncomingPipePairs.RemoveAt(0);

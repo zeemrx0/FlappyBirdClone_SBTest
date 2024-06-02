@@ -2,8 +2,8 @@ using LNE.Colliders;
 using LNE.Core;
 using LNE.Inputs;
 using LNE.Pipes;
+using LNE.Utilities;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Zenject;
 
 namespace LNE.Birds
@@ -19,13 +19,16 @@ namespace LNE.Birds
     [SerializeField]
     private Transform _groundContainer;
 
+    [SerializeField]
+    private Transform _floor;
+
     private GamePlayManager _gamePlayManager;
     private PlayerInputManager _playerInputManager;
-    private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
-    private GameBoxCollider _collider;
-    private BirdMovementModel _model;
+    private GameCircleCollider _collider;
+    private BirdMovementModel _model = new BirdMovementModel();
     private AIBird _aiBird;
+    private Vector2 _previousPosition;
 
     public float FlapForce => _birdMovementData.FlapForce;
 
@@ -37,27 +40,24 @@ namespace LNE.Birds
     {
       _gamePlayManager = gamePlayManager;
       _playerInputManager = playerInputManager;
-      _playerInputManager.Init();
-      _playerInputAction = _playerInputManager.PlayerInputAction;
     }
 
     private void Awake()
     {
       _view = GetComponent<BirdMovementView>();
-      _collider = GetComponent<GameBoxCollider>();
-      _model = new BirdMovementModel();
+      _collider = GetComponent<GameCircleCollider>();
       _aiBird = GetComponent<AIBird>();
     }
 
     private void OnEnable()
     {
-      _playerInputAction.BirdMovement.Flap.performed += ctx => HandleFlap(ctx);
+      _playerInputManager.TapArea.PointerDownEvent += HandleFlap;
       _gamePlayManager.OnChangePlayMode += HandleOnChangePlayMode;
     }
 
     private void OnDisable()
     {
-      _playerInputAction.BirdMovement.Flap.performed -= ctx => HandleFlap(ctx);
+      _playerInputManager.TapArea.PointerDownEvent -= HandleFlap;
       _gamePlayManager.OnChangePlayMode -= HandleOnChangePlayMode;
     }
 
@@ -70,7 +70,7 @@ namespace LNE.Birds
 
       ApplyGravity();
 
-      _view.Flap(_model.VerticalSpeed, _birdMovementData.RotateSpeed);
+      _view.Fly(_model.VerticalSpeed, _birdMovementData.RotateSpeed);
 
       CheckIsCollidingWithGround();
 
@@ -79,12 +79,19 @@ namespace LNE.Birds
         return;
       }
 
+      CheckIsCollidingWithFloor();
+
       CheckIsCollidingWithPipe();
 
       if (_model.TimeUntilNextFlap > 0f)
       {
         _model.TimeUntilNextFlap -= Time.deltaTime;
       }
+    }
+
+    private void LateUpdate()
+    {
+      _previousPosition = transform.position;
     }
 
     private void CheckIsCollidingWithPipe()
@@ -98,7 +105,18 @@ namespace LNE.Birds
       {
         if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
         {
+          _view.PlayDeadAnimation();
+          _view.PlayHitSound();
+          _view.PlayFallSound();
+
+          _view.SpawnHitVFX(
+            ColliderHelper.GetTouchPoint(
+              _collider,
+              pipe.GetComponent<GameBoxCollider>()
+            ) ?? _collider.transform.position
+          );
           _gamePlayManager.TriggerPlayerDead();
+          transform.position = _previousPosition;
           return;
         }
       }
@@ -111,9 +129,29 @@ namespace LNE.Birds
         if (_collider.IsCollidingWith(ground.GetComponent<GameBoxCollider>()))
         {
           _model.VerticalSpeed = 0f;
+          if (!_gamePlayManager.IsPlayerDead)
+          {
+            _view.SpawnHitVFX(
+              ColliderHelper.GetTouchPoint(
+                _collider,
+                ground.GetComponent<GameBoxCollider>()
+              ) ?? _collider.transform.position
+            );
+            _view.PlayDeadAnimation();
+            _view.PlayHitSound();
+            transform.position = _previousPosition;
+          }
           _gamePlayManager.TriggerGameOver();
           return;
         }
+      }
+    }
+
+    private void CheckIsCollidingWithFloor()
+    {
+      if (_collider.IsCollidingWith(_floor.GetComponent<GameBoxCollider>()))
+      {
+        transform.position = _previousPosition;
       }
     }
 
@@ -126,6 +164,8 @@ namespace LNE.Birds
     public void Flap()
     {
       _model.VerticalSpeed = _birdMovementData.FlapForce;
+      _view.PlayFlapSound();
+      _view.PlayFlapAnimation();
     }
 
     public bool TryFlap()
@@ -152,9 +192,7 @@ namespace LNE.Birds
       }
     }
 
-    private void HandleFlap(
-      UnityEngine.InputSystem.InputAction.CallbackContext ctx
-    )
+    public void HandleFlap()
     {
       if (_gamePlayManager.IsPlayerDead)
       {
@@ -168,10 +206,7 @@ namespace LNE.Birds
 
       if (_gamePlayManager.IsAIPlayMode)
       {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-          _gamePlayManager.ShowAIModeMessage();
-        }
+        _gamePlayManager.ShowAIModeMessage();
         return;
       }
 

@@ -29,8 +29,17 @@ namespace LNE.Core
     [SerializeField]
     private InfoCanvas _infoCanvas;
 
+    [SerializeField]
+    private ControlCanvas _controlCanvas;
+
+    [SerializeField]
+    private AudioClip _scoreSound;
+
     private ZenjectSceneLoader _zenjectSceneLoader;
     private SavingManager _savingSystem;
+
+    private AudioSource _audioSource;
+    private ScoreModel _previousScoreModel = new ScoreModel();
 
     [Inject]
     private void Construct(
@@ -45,15 +54,20 @@ namespace LNE.Core
     private void Awake()
     {
       GameSpeed = _gamePlayData.InitialGameSpeed;
+      _audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
-      GameSpeed =
-        _gamePlayData.InitialGameSpeed
-        + Mathf.Floor(
-          ScoreModel.Score / _gamePlayData.GameSpeedIncrementInterval
-        ) * _gamePlayData.GameSpeedIncrement;
+      if (
+        ScoreModel.Score % _gamePlayData.GameSpeedIncrementInterval == 0
+        && ScoreModel.Score > _previousScoreModel.Score
+      )
+      {
+        _previousScoreModel.Score = ScoreModel.Score;
+        GameSpeed += _gamePlayData.GameSpeedIncrement;
+        _audioSource.PlayOneShot(_scoreSound);
+      }
     }
 
     public void StartGame()
@@ -67,6 +81,7 @@ namespace LNE.Core
       _gameStartCanvas.SetActive(false);
       _infoCanvas.SetActive(true);
       _infoCanvas.SetScore(ScoreModel.Score);
+      _controlCanvas.SetToggleAIPlayModeButtonActive(true);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
@@ -94,15 +109,16 @@ namespace LNE.Core
       {
         _gameOverCanvas.SetCrownActive(false);
       }
-      _gameOverCanvas.SetHighScore(highScore.Score);
       _infoCanvas.SetActive(false);
+      _controlCanvas.SetActive(false);
+      _gameOverCanvas.SetHighScore(highScore.Score);
       _gameOverCanvas.SetActive(true);
     }
 
     public void ToggleIsAIPlayMode()
     {
       IsAIPlayMode = !IsAIPlayMode;
-      _infoCanvas.SetExitAIPlayModeButtonState(IsAIPlayMode);
+      _controlCanvas.SetToggleAIPlayModeButtonState(IsAIPlayMode);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
@@ -121,7 +137,7 @@ namespace LNE.Core
       _zenjectSceneLoader.LoadScene(SceneName.Game);
     }
 
-    public void AddPoint()
+    public void IncreaseScore()
     {
       ScoreModel.Score++;
       _infoCanvas.SetScore(ScoreModel.Score);
