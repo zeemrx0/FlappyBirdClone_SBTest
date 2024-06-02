@@ -3,6 +3,7 @@ using LNE.Colliders;
 using LNE.Core;
 using LNE.Utilities.Constants;
 using UnityEngine;
+using UnityEngine.Pool;
 using Zenject;
 
 namespace LNE.Pipes
@@ -23,6 +24,7 @@ namespace LNE.Pipes
 
     private GameBoxCollider _playerCollider;
     private float _timeUntilNextSpawn = 0f;
+    private IObjectPool<PipePair> _pool;
 
     [Inject]
     public void Construct(
@@ -32,6 +34,22 @@ namespace LNE.Pipes
     {
       _diContainer = container;
       _gamePlayManager = gamePlayManager;
+    }
+
+    private void Awake()
+    {
+      _pool = new ObjectPool<PipePair>(
+        () =>
+          _diContainer
+            .InstantiatePrefab(_pipePairSpawnerData.PipePairPrefab)
+            .GetComponent<PipePair>(),
+        pooledPipePair => pooledPipePair.gameObject.SetActive(true),
+        pooledPipePair => pooledPipePair.gameObject.SetActive(false),
+        pooledPipePair => Destroy(pooledPipePair.gameObject),
+        true,
+        10,
+        10
+      );
     }
 
     private void Start()
@@ -104,9 +122,10 @@ namespace LNE.Pipes
         _pipePairSpawnerData.MinSpawnY,
         _pipePairSpawnerData.MaxSpawnY
       );
-      PipePair pipePair = _diContainer
-        .InstantiatePrefab(_pipePairSpawnerData.PipePairPrefab)
-        .GetComponent<PipePair>();
+
+      PipePair pipePair = _pool.Get();
+
+      pipePair.BelongingPool = _pool;
 
       pipePair.transform.position = new Vector3(
         transform.position.x,
