@@ -154,18 +154,22 @@ namespace LNE.Birds
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
+      if (_gameCoreManager.IsPlayerDead)
+      {
+        return;
+      }
+
+      if (!_gameCoreManager.IsGameStarted)
+      {
+        _gameCoreManager.StartGame();
+      }
+
       if (_gameCoreManager.IsAIPlayMode)
       {
-        Debug.Log(EventSystem.current.IsPointerOverGameObject());
         if (EventSystem.current.IsPointerOverGameObject())
         {
           _gameCoreManager.ShowAIModeMessage();
         }
-        return;
-      }
-
-      if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsPlayerDead)
-      {
         return;
       }
 

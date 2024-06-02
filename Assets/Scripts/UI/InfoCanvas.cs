@@ -15,14 +15,9 @@ namespace LNE.UI
     [SerializeField]
     private FadableUI _AIModeMessage;
 
-    public void Show()
+    public void SetActive(bool isActive)
     {
-      gameObject.SetActive(true);
-    }
-
-    public void Hide()
-    {
-      gameObject.SetActive(false);
+      gameObject.SetActive(isActive);
     }
 
     public void SetScore(int score)
@@ -43,10 +38,10 @@ namespace LNE.UI
       }
 
       _AIModeMessage.Show();
-      StartCoroutine(HideAIModeMessage(delay));
+      StartCoroutine(HideAIModeMessageCoroutine(delay));
     }
 
-    public IEnumerator HideAIModeMessage(float delay)
+    public IEnumerator HideAIModeMessageCoroutine(float delay)
     {
       yield return new WaitForSeconds(delay);
       _AIModeMessage.Hide();

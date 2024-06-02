@@ -1,4 +1,5 @@
 using System;
+using LNE.Inputs;
 using LNE.UI;
 using LNE.Utilities.Constants;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace LNE.Core
       _savingSystem = savingSystem;
     }
 
-    public void StartGame(bool isAIPlayMode)
+    public void StartGame()
     {
       if (IsGameStarted)
       {
@@ -45,9 +46,8 @@ namespace LNE.Core
       }
 
       IsGameStarted = true;
-      IsAIPlayMode = isAIPlayMode;
-      _gameStartCanvas.Hide();
-      _infoCanvas.Show();
+      _gameStartCanvas.SetActive(false);
+      _infoCanvas.SetActive(true);
       _infoCanvas.SetScore(ScoreModel.Score);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
@@ -65,14 +65,20 @@ namespace LNE.Core
         SavingPath.HighScore,
         new ScoreModel()
       );
-      Debug.Log("High score: " + highScore.Score);
+      _gameOverCanvas.SetScore(ScoreModel.Score);
       if (ScoreModel.Score > highScore.Score)
       {
+        highScore = ScoreModel;
         _savingSystem.Save(ScoreModel, SavingPath.HighScore);
+        _gameOverCanvas.SetCrownActive(true);
       }
-      _gameOverCanvas.Show();
-      _gameOverCanvas.SetScore(ScoreModel.Score);
-      _infoCanvas.Hide();
+      else
+      {
+        _gameOverCanvas.SetCrownActive(false);
+      }
+      _gameOverCanvas.SetHighScore(highScore.Score);
+      _infoCanvas.SetActive(false);
+      _gameOverCanvas.SetActive(true);
     }
 
     public void ToggleIsAIPlayMode()

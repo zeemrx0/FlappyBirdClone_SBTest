@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LNE.UI
 {
@@ -8,14 +9,30 @@ namespace LNE.UI
     [SerializeField]
     private TextMeshProUGUI _scoreText;
 
-    public void Show()
+    [SerializeField]
+    private TextMeshProUGUI _highScoreText;
+
+    [SerializeField]
+    private Image _crownImage;
+
+    public void SetActive(bool isActive)
     {
-      gameObject.SetActive(true);
+      gameObject.SetActive(isActive);
     }
 
     public void SetScore(int score)
     {
       _scoreText.text = score.ToString();
+    }
+
+    public void SetHighScore(int highScore)
+    {
+      _highScoreText.text = highScore.ToString();
+    }
+
+    public void SetCrownActive(bool isActive)
+    {
+      _crownImage.gameObject.SetActive(isActive);
     }
   }
 }
