@@ -16,4 +16,4 @@ MonoBehaviour:
   <Gravity>k__BackingField: -9.8
   <Mass>k__BackingField: 8
   <RotateSpeed>k__BackingField: 1
-  <FlapCooldown>k__BackingField: 0.12
+  <FlapCooldown>k__BackingField: 0.11

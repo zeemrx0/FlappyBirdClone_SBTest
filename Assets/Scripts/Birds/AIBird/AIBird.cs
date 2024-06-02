@@ -13,18 +13,18 @@ namespace LNE.Birds
     private AIBirdData _aiBirdData;
 
     [SerializeField]
-    private PipeSpawner _pipeSpawner;
+    private PipePairSpawner _pipePairSpawner;
 
-    private GamePlayManager _gameCoreManager;
+    private GamePlayManager _gamePlayManager;
     private BirdMovementPresenter _birdMovementPresenter;
     private GameBoxCollider _collider;
     private float _heightDifference = 0f;
     private float _timeUntilNextFlap = 0f;
 
     [Inject]
-    private void Construct(GamePlayManager gameCoreManager)
+    private void Construct(GamePlayManager gamePlayManager)
     {
-      _gameCoreManager = gameCoreManager;
+      _gamePlayManager = gamePlayManager;
     }
 
     private void Awake()
@@ -36,15 +36,15 @@ namespace LNE.Birds
     private void Update()
     {
       if (
-        _gameCoreManager.IsGameOver
-        || _gameCoreManager.IsPlayerDead
-        || !_gameCoreManager.IsGameStarted
+        _gamePlayManager.IsGameOver
+        || _gamePlayManager.IsPlayerDead
+        || !_gamePlayManager.IsGameStarted
       )
       {
         return;
       }
 
-      if (_pipeSpawner.FirstPipePair == null)
+      if (_pipePairSpawner.FirstPipePair == null)
       {
         return;
       }
@@ -62,7 +62,7 @@ namespace LNE.Birds
       if (_timeUntilNextFlap <= 0f)
       {
         _heightDifference =
-          _pipeSpawner.FirstPipePair.transform.position.y
+          _pipePairSpawner.FirstPipePair.transform.position.y
           + _aiBirdData.TargetGap
           - _collider.transform.position.y;
 

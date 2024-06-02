@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51003cc15479417ab0a743943998a87, type: 3}
-  m_Name: AIBirdData
+  m_Script: {fileID: 11500000, guid: 1194e5b6ac040456d972a0c0ee238b41, type: 3}
+  m_Name: GamePlayData
   m_EditorClassIdentifier: 
-  <TargetGap>k__BackingField: -0.746
-  <FlapCooldownCoefficient>k__BackingField: 0.6
-  <MaxFlapCooldown>k__BackingField: 0.1
+  <InitialGameSpeed>k__BackingField: 7
+  <GameSpeedIncrement>k__BackingField: 0.1
+  <GameSpeedIncrementInterval>k__BackingField: 10

@@ -1,5 +1,4 @@
 using System;
-using LNE.Inputs;
 using LNE.UI;
 using LNE.Utilities.Constants;
 using UnityEngine;
@@ -10,11 +9,16 @@ namespace LNE.Core
   public class GamePlayManager : MonoBehaviour
   {
     public event Action<bool> OnChangePlayMode;
+
+    public float GameSpeed { get; private set; }
     public bool IsGameOver { get; private set; } = false;
     public bool IsGameStarted { get; private set; } = false;
     public bool IsPlayerDead { get; private set; } = false;
     public bool IsAIPlayMode { get; private set; } = false;
     public ScoreModel ScoreModel { get; private set; } = new ScoreModel();
+
+    [SerializeField]
+    private GamePlayData _gamePlayData;
 
     [SerializeField]
     private GameOverCanvas _gameOverCanvas;
@@ -36,6 +40,20 @@ namespace LNE.Core
     {
       _zenjectSceneLoader = zenjectSceneLoader;
       _savingSystem = savingSystem;
+    }
+
+    private void Awake()
+    {
+      GameSpeed = _gamePlayData.InitialGameSpeed;
+    }
+
+    private void Update()
+    {
+      GameSpeed =
+        _gamePlayData.InitialGameSpeed
+        + Mathf.Floor(
+          ScoreModel.Score / _gamePlayData.GameSpeedIncrementInterval
+        ) * _gamePlayData.GameSpeedIncrement;
     }
 
     public void StartGame()

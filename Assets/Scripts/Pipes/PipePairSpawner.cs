@@ -3,11 +3,12 @@ using LNE.Colliders;
 using LNE.Core;
 using LNE.Utilities.Constants;
 using UnityEngine;
+using UnityEngine.Pool;
 using Zenject;
 
 namespace LNE.Pipes
 {
-  public class PipeSpawner : MonoBehaviour
+  public class PipePairSpawner : MonoBehaviour
   {
     public List<PipePair> IncomingPipePairs { get; private set; } =
       new List<PipePair>();
@@ -16,40 +17,39 @@ namespace LNE.Pipes
       IncomingPipePairs.Count > 0 ? IncomingPipePairs[0] : null;
 
     [SerializeField]
-    private PipePair _pipePairPrefab;
-
-    [SerializeField]
-    private float _minSpawnInterval = 1.5f;
-
-    [SerializeField]
-    private float _maxSpawnInterval = 2.1f;
-
-    [SerializeField]
-    private float _minSpawnY = -6f;
-
-    [SerializeField]
-    private float _maxSpawnY = 6f;
-
-    [SerializeField]
-    private float _minSpaceBetweenPipes = 24.3f;
-
-    [SerializeField]
-    private float _maxSpaceBetweenPipes = 25.3f;
+    private PipePairSpawnerData _pipePairSpawnerData;
 
     private DiContainer _diContainer;
-    private GamePlayManager _gameCoreManager;
+    private GamePlayManager _gamePlayManager;
 
     private GameBoxCollider _playerCollider;
     private float _timeUntilNextSpawn = 0f;
+    private IObjectPool<PipePair> _pool;
 
     [Inject]
     public void Construct(
       DiContainer container,
-      GamePlayManager gameCoreManager
+      GamePlayManager gamePlayManager
     )
     {
       _diContainer = container;
-      _gameCoreManager = gameCoreManager;
+      _gamePlayManager = gamePlayManager;
+    }
+
+    private void Awake()
+    {
+      _pool = new ObjectPool<PipePair>(
+        () =>
+          _diContainer
+            .InstantiatePrefab(_pipePairSpawnerData.PipePairPrefab)
+            .GetComponent<PipePair>(),
+        pooledPipePair => pooledPipePair.gameObject.SetActive(true),
+        pooledPipePair => pooledPipePair.gameObject.SetActive(false),
+        pooledPipePair => Destroy(pooledPipePair.gameObject),
+        true,
+        10,
+        10
+      );
     }
 
     private void Start()
@@ -61,12 +61,12 @@ namespace LNE.Pipes
 
     void Update()
     {
-      if (!_gameCoreManager.IsGameStarted)
+      if (!_gamePlayManager.IsGameStarted)
       {
         return;
       }
 
-      if (_gameCoreManager.IsPlayerDead)
+      if (_gamePlayManager.IsPlayerDead)
       {
         return;
       }
@@ -80,7 +80,7 @@ namespace LNE.Pipes
 
       if (IsFirstPipePairPassedPlayer())
       {
-        _gameCoreManager.AddPoint();
+        _gamePlayManager.AddPoint();
       }
     }
 
@@ -112,13 +112,20 @@ namespace LNE.Pipes
 
     private void SpawnPipePair()
     {
-      float spawnInterval = Random.Range(_minSpawnInterval, _maxSpawnInterval);
+      float spawnInterval = Random.Range(
+        _pipePairSpawnerData.MinSpawnInterval,
+        _pipePairSpawnerData.MaxSpawnInterval
+      );
       _timeUntilNextSpawn = spawnInterval;
 
-      float randomY = Random.Range(_minSpawnY, _maxSpawnY);
-      PipePair pipePair = _diContainer
-        .InstantiatePrefab(_pipePairPrefab)
-        .GetComponent<PipePair>();
+      float randomY = Random.Range(
+        _pipePairSpawnerData.MinSpawnY,
+        _pipePairSpawnerData.MaxSpawnY
+      );
+
+      PipePair pipePair = _pool.Get();
+
+      pipePair.BelongingPool = _pool;
 
       pipePair.transform.position = new Vector3(
         transform.position.x,
@@ -131,8 +138,8 @@ namespace LNE.Pipes
       IncomingPipePairs.Add(pipePair);
 
       float randomSpaceBetweenPipes = Random.Range(
-        _minSpaceBetweenPipes,
-        _maxSpaceBetweenPipes
+        _pipePairSpawnerData.MinSpaceBetweenPipes,
+        _pipePairSpawnerData.MaxSpaceBetweenPipes
       );
 
       pipePair.SetSpaceBetween(randomSpaceBetweenPipes);

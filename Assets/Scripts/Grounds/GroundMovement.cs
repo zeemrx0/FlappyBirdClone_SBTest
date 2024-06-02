@@ -2,10 +2,16 @@ using LNE.Core;
 using UnityEngine;
 using Zenject;
 
-namespace LNE.Pipes
+namespace LNE.Grounds
 {
-  public class PipePairMovement : MonoBehaviour
+  public class GroundMovement : MonoBehaviour
   {
+    [SerializeField]
+    private float _destroyXPosition = -21f;
+
+    [SerializeField]
+    private float _resetXPosition = 21f;
+
     private GamePlayManager _gamePlayManager;
 
     [Inject]
@@ -23,6 +29,18 @@ namespace LNE.Pipes
 
       transform.position +=
         Vector3.left * _gamePlayManager.GameSpeed * Time.deltaTime;
+    }
+
+    void LateUpdate()
+    {
+      if (transform.position.x < _destroyXPosition)
+      {
+        transform.position = new Vector3(
+          _resetXPosition,
+          transform.position.y,
+          transform.position.z
+        );
+      }
     }
   }
 }
