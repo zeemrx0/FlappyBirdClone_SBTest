@@ -7,7 +7,7 @@ using Zenject;
 
 namespace LNE.Pipes
 {
-  public class PipeSpawner : MonoBehaviour
+  public class PipePairSpawner : MonoBehaviour
   {
     public List<PipePair> IncomingPipePairs { get; private set; } =
       new List<PipePair>();
@@ -16,25 +16,7 @@ namespace LNE.Pipes
       IncomingPipePairs.Count > 0 ? IncomingPipePairs[0] : null;
 
     [SerializeField]
-    private PipePair _pipePairPrefab;
-
-    [SerializeField]
-    private float _minSpawnInterval = 1.5f;
-
-    [SerializeField]
-    private float _maxSpawnInterval = 2.1f;
-
-    [SerializeField]
-    private float _minSpawnY = -6f;
-
-    [SerializeField]
-    private float _maxSpawnY = 6f;
-
-    [SerializeField]
-    private float _minSpaceBetweenPipes = 24.3f;
-
-    [SerializeField]
-    private float _maxSpaceBetweenPipes = 25.3f;
+    private PipePairSpawnerData _pipePairSpawnerData;
 
     private DiContainer _diContainer;
     private GamePlayManager _gamePlayManager;
@@ -112,12 +94,18 @@ namespace LNE.Pipes
 
     private void SpawnPipePair()
     {
-      float spawnInterval = Random.Range(_minSpawnInterval, _maxSpawnInterval);
+      float spawnInterval = Random.Range(
+        _pipePairSpawnerData.MinSpawnInterval,
+        _pipePairSpawnerData.MaxSpawnInterval
+      );
       _timeUntilNextSpawn = spawnInterval;
 
-      float randomY = Random.Range(_minSpawnY, _maxSpawnY);
+      float randomY = Random.Range(
+        _pipePairSpawnerData.MinSpawnY,
+        _pipePairSpawnerData.MaxSpawnY
+      );
       PipePair pipePair = _diContainer
-        .InstantiatePrefab(_pipePairPrefab)
+        .InstantiatePrefab(_pipePairSpawnerData.PipePairPrefab)
         .GetComponent<PipePair>();
 
       pipePair.transform.position = new Vector3(
@@ -131,8 +119,8 @@ namespace LNE.Pipes
       IncomingPipePairs.Add(pipePair);
 
       float randomSpaceBetweenPipes = Random.Range(
-        _minSpaceBetweenPipes,
-        _maxSpaceBetweenPipes
+        _pipePairSpawnerData.MinSpaceBetweenPipes,
+        _pipePairSpawnerData.MaxSpaceBetweenPipes
       );
 
       pipePair.SetSpaceBetween(randomSpaceBetweenPipes);

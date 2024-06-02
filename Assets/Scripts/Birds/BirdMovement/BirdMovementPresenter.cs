@@ -1,6 +1,5 @@
 using LNE.Colliders;
 using LNE.Core;
-using LNE.Grounds;
 using LNE.Inputs;
 using LNE.Pipes;
 using UnityEngine;
@@ -15,10 +14,10 @@ namespace LNE.Birds
     private BirdMovementData _birdMovementData;
 
     [SerializeField]
-    private PipeSpawner _pipeSpawner;
+    private PipePairSpawner _pipePairSpawner;
 
     [SerializeField]
-    private Ground _ground;
+    private Transform _groundContainer;
 
     private GamePlayManager _gamePlayManager;
     private PlayerInputManager _playerInputManager;
@@ -90,12 +89,12 @@ namespace LNE.Birds
 
     private void CheckIsCollidingWithPipe()
     {
-      if (_pipeSpawner.FirstPipePair == null)
+      if (_pipePairSpawner.FirstPipePair == null)
       {
         return;
       }
 
-      foreach (Transform pipe in _pipeSpawner.FirstPipePair.transform)
+      foreach (Transform pipe in _pipePairSpawner.FirstPipePair.transform)
       {
         if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
         {
@@ -107,11 +106,14 @@ namespace LNE.Birds
 
     private void CheckIsCollidingWithGround()
     {
-      if (_collider.IsCollidingWith(_ground.GetComponent<GameBoxCollider>()))
+      foreach (Transform ground in _groundContainer)
       {
-        _model.VerticalSpeed = 0f;
-        _gamePlayManager.TriggerGameOver();
-        return;
+        if (_collider.IsCollidingWith(ground.GetComponent<GameBoxCollider>()))
+        {
+          _model.VerticalSpeed = 0f;
+          _gamePlayManager.TriggerGameOver();
+          return;
+        }
       }
     }
 

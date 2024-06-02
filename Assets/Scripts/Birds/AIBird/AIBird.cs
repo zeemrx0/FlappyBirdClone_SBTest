@@ -13,7 +13,7 @@ namespace LNE.Birds
     private AIBirdData _aiBirdData;
 
     [SerializeField]
-    private PipeSpawner _pipeSpawner;
+    private PipePairSpawner _pipePairSpawner;
 
     private GamePlayManager _gamePlayManager;
     private BirdMovementPresenter _birdMovementPresenter;
@@ -44,7 +44,7 @@ namespace LNE.Birds
         return;
       }
 
-      if (_pipeSpawner.FirstPipePair == null)
+      if (_pipePairSpawner.FirstPipePair == null)
       {
         return;
       }
@@ -62,7 +62,7 @@ namespace LNE.Birds
       if (_timeUntilNextFlap <= 0f)
       {
         _heightDifference =
-          _pipeSpawner.FirstPipePair.transform.position.y
+          _pipePairSpawner.FirstPipePair.transform.position.y
           + _aiBirdData.TargetGap
           - _collider.transform.position.y;
 

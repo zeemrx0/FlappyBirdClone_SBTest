@@ -4,7 +4,7 @@ namespace LNE.Core
 {
   [CreateAssetMenu(
     fileName = "GamePlayData",
-    menuName = "Core/Game Play",
+    menuName = "Core/Game Play Data",
     order = 0
   )]
   public class GamePlayData : ScriptableObject
