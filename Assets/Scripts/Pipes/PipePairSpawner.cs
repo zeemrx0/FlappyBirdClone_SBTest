@@ -80,7 +80,7 @@ namespace LNE.Pipes
 
       if (IsFirstPipePairPassedPlayer())
       {
-        _gamePlayManager.AddPoint();
+        _gamePlayManager.IncreaseScore();
       }
     }
 

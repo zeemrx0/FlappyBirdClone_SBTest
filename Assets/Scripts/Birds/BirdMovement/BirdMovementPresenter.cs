@@ -23,7 +23,7 @@ namespace LNE.Birds
     private PlayerInputManager _playerInputManager;
     private BirdMovementView _view;
     private GameBoxCollider _collider;
-    private BirdMovementModel _model;
+    private BirdMovementModel _model = new BirdMovementModel();
     private AIBird _aiBird;
 
     public float FlapForce => _birdMovementData.FlapForce;
@@ -42,7 +42,6 @@ namespace LNE.Birds
     {
       _view = GetComponent<BirdMovementView>();
       _collider = GetComponent<GameBoxCollider>();
-      _model = new BirdMovementModel();
       _aiBird = GetComponent<AIBird>();
     }
 
@@ -67,7 +66,7 @@ namespace LNE.Birds
 
       ApplyGravity();
 
-      _view.Flap(_model.VerticalSpeed, _birdMovementData.RotateSpeed);
+      _view.Fly(_model.VerticalSpeed, _birdMovementData.RotateSpeed);
 
       CheckIsCollidingWithGround();
 
@@ -96,6 +95,8 @@ namespace LNE.Birds
         if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
         {
           _gamePlayManager.TriggerPlayerDead();
+          _view.PlayHitSound();
+          _view.PlayFallSound();
           return;
         }
       }
@@ -109,6 +110,10 @@ namespace LNE.Birds
         {
           _model.VerticalSpeed = 0f;
           _gamePlayManager.TriggerGameOver();
+          if (!_gamePlayManager.IsPlayerDead)
+          {
+            _view.PlayHitSound();
+          }
           return;
         }
       }
@@ -123,6 +128,7 @@ namespace LNE.Birds
     public void Flap()
     {
       _model.VerticalSpeed = _birdMovementData.FlapForce;
+      _view.PlayFlapSound();
     }
 
     public bool TryFlap()
