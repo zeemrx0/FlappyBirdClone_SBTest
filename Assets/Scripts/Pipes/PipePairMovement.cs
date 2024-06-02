@@ -6,25 +6,23 @@ namespace LNE.Pipes
 {
   public class PipePairMovement : MonoBehaviour
   {
-    [SerializeField]
-    private float _speed = 1f;
-
-    private GamePlayManager _gameCoreManager;
+    private GamePlayManager _gamePlayManager;
 
     [Inject]
-    private void Construct(GamePlayManager gameCoreManager)
+    private void Construct(GamePlayManager gamePlayManager)
     {
-      _gameCoreManager = gameCoreManager;
+      _gamePlayManager = gamePlayManager;
     }
 
     void Update()
     {
-      if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsPlayerDead)
+      if (!_gamePlayManager.IsGameStarted || _gamePlayManager.IsPlayerDead)
       {
         return;
       }
 
-      transform.position += Vector3.left * _speed * Time.deltaTime;
+      transform.position +=
+        Vector3.left * _gamePlayManager.GameSpeed * Time.deltaTime;
     }
   }
 }

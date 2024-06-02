@@ -37,7 +37,7 @@ namespace LNE.Pipes
     private float _maxSpaceBetweenPipes = 25.3f;
 
     private DiContainer _diContainer;
-    private GamePlayManager _gameCoreManager;
+    private GamePlayManager _gamePlayManager;
 
     private GameBoxCollider _playerCollider;
     private float _timeUntilNextSpawn = 0f;
@@ -45,11 +45,11 @@ namespace LNE.Pipes
     [Inject]
     public void Construct(
       DiContainer container,
-      GamePlayManager gameCoreManager
+      GamePlayManager gamePlayManager
     )
     {
       _diContainer = container;
-      _gameCoreManager = gameCoreManager;
+      _gamePlayManager = gamePlayManager;
     }
 
     private void Start()
@@ -61,12 +61,12 @@ namespace LNE.Pipes
 
     void Update()
     {
-      if (!_gameCoreManager.IsGameStarted)
+      if (!_gamePlayManager.IsGameStarted)
       {
         return;
       }
 
-      if (_gameCoreManager.IsPlayerDead)
+      if (_gamePlayManager.IsPlayerDead)
       {
         return;
       }
@@ -80,7 +80,7 @@ namespace LNE.Pipes
 
       if (IsFirstPipePairPassedPlayer())
       {
-        _gameCoreManager.AddPoint();
+        _gamePlayManager.AddPoint();
       }
     }
 

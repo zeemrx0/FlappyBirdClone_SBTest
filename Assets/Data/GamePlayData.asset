@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 843891dd7642b4b24a0d077f87727f38, type: 3}
-  m_Name: BirdMovementData
+  m_Script: {fileID: 11500000, guid: 1194e5b6ac040456d972a0c0ee238b41, type: 3}
+  m_Name: GamePlayData
   m_EditorClassIdentifier: 
-  <FlapForce>k__BackingField: 18
-  <Gravity>k__BackingField: -9.8
-  <Mass>k__BackingField: 8
-  <RotateSpeed>k__BackingField: 1
-  <FlapCooldown>k__BackingField: 0.11
+  <InitialGameSpeed>k__BackingField: 7
+  <GameSpeedIncrement>k__BackingField: 0.05
+  <GameSpeedIncrementInterval>k__BackingField: 20

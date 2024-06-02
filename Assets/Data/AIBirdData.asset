@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <TargetGap>k__BackingField: -0.75
   <FlapCooldownCoefficient>k__BackingField: 0.6
-  <MaxFlapCooldown>k__BackingField: 0.12
+  <MaxFlapCooldown>k__BackingField: 0.1

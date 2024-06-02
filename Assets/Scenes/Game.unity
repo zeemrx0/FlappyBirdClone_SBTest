@@ -1978,6 +1978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62c51844f4a848bb990ca8601b8e22e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gamePlayData: {fileID: 11400000, guid: c8ab394d21c8e4c40a1fc9fcbf90fca0, type: 2}
   _gameOverCanvas: {fileID: 738504106}
   _gameStartCanvas: {fileID: 1245496394}
   _infoCanvas: {fileID: 246162540}

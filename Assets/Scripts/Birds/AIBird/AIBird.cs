@@ -15,16 +15,16 @@ namespace LNE.Birds
     [SerializeField]
     private PipeSpawner _pipeSpawner;
 
-    private GamePlayManager _gameCoreManager;
+    private GamePlayManager _gamePlayManager;
     private BirdMovementPresenter _birdMovementPresenter;
     private GameBoxCollider _collider;
     private float _heightDifference = 0f;
     private float _timeUntilNextFlap = 0f;
 
     [Inject]
-    private void Construct(GamePlayManager gameCoreManager)
+    private void Construct(GamePlayManager gamePlayManager)
     {
-      _gameCoreManager = gameCoreManager;
+      _gamePlayManager = gamePlayManager;
     }
 
     private void Awake()
@@ -36,9 +36,9 @@ namespace LNE.Birds
     private void Update()
     {
       if (
-        _gameCoreManager.IsGameOver
-        || _gameCoreManager.IsPlayerDead
-        || !_gameCoreManager.IsGameStarted
+        _gamePlayManager.IsGameOver
+        || _gamePlayManager.IsPlayerDead
+        || !_gamePlayManager.IsGameStarted
       )
       {
         return;

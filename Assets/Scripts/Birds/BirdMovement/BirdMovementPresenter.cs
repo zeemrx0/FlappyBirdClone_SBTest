@@ -20,7 +20,7 @@ namespace LNE.Birds
     [SerializeField]
     private Ground _ground;
 
-    private GamePlayManager _gameCoreManager;
+    private GamePlayManager _gamePlayManager;
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
@@ -32,11 +32,11 @@ namespace LNE.Birds
 
     [Inject]
     private void Construct(
-      GamePlayManager gameCoreManager,
+      GamePlayManager gamePlayManager,
       PlayerInputManager playerInputManager
     )
     {
-      _gameCoreManager = gameCoreManager;
+      _gamePlayManager = gamePlayManager;
       _playerInputManager = playerInputManager;
       _playerInputManager.Init();
       _playerInputAction = _playerInputManager.PlayerInputAction;
@@ -53,18 +53,18 @@ namespace LNE.Birds
     private void OnEnable()
     {
       _playerInputAction.BirdMovement.Flap.performed += ctx => HandleFlap(ctx);
-      _gameCoreManager.OnChangePlayMode += HandleOnChangePlayMode;
+      _gamePlayManager.OnChangePlayMode += HandleOnChangePlayMode;
     }
 
     private void OnDisable()
     {
       _playerInputAction.BirdMovement.Flap.performed -= ctx => HandleFlap(ctx);
-      _gameCoreManager.OnChangePlayMode -= HandleOnChangePlayMode;
+      _gamePlayManager.OnChangePlayMode -= HandleOnChangePlayMode;
     }
 
     void Update()
     {
-      if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsGameOver)
+      if (!_gamePlayManager.IsGameStarted || _gamePlayManager.IsGameOver)
       {
         return;
       }
@@ -75,7 +75,7 @@ namespace LNE.Birds
 
       CheckIsCollidingWithGround();
 
-      if (_gameCoreManager.IsPlayerDead)
+      if (_gamePlayManager.IsPlayerDead)
       {
         return;
       }
@@ -99,7 +99,7 @@ namespace LNE.Birds
       {
         if (_collider.IsCollidingWith(pipe.GetComponent<GameBoxCollider>()))
         {
-          _gameCoreManager.TriggerPlayerDead();
+          _gamePlayManager.TriggerPlayerDead();
           return;
         }
       }
@@ -110,7 +110,7 @@ namespace LNE.Birds
       if (_collider.IsCollidingWith(_ground.GetComponent<GameBoxCollider>()))
       {
         _model.VerticalSpeed = 0f;
-        _gameCoreManager.TriggerGameOver();
+        _gamePlayManager.TriggerGameOver();
         return;
       }
     }
@@ -154,21 +154,21 @@ namespace LNE.Birds
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
-      if (_gameCoreManager.IsPlayerDead)
+      if (_gamePlayManager.IsPlayerDead)
       {
         return;
       }
 
-      if (!_gameCoreManager.IsGameStarted)
+      if (!_gamePlayManager.IsGameStarted)
       {
-        _gameCoreManager.StartGame();
+        _gamePlayManager.StartGame();
       }
 
-      if (_gameCoreManager.IsAIPlayMode)
+      if (_gamePlayManager.IsAIPlayMode)
       {
         if (EventSystem.current.IsPointerOverGameObject())
         {
-          _gameCoreManager.ShowAIModeMessage();
+          _gamePlayManager.ShowAIModeMessage();
         }
         return;
       }
