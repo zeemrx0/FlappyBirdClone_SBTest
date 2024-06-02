@@ -6,7 +6,8 @@ namespace LNE.Core
   {
     public override void InstallBindings()
     {
-      Container.Bind<GameCorePresenter>().FromComponentInHierarchy().AsSingle();
+      Container.Bind<GamePlayManager>().FromComponentInHierarchy().AsSingle();
+      Container.Bind<SavingManager>().FromComponentInHierarchy().AsSingle();
     }
   }
 }

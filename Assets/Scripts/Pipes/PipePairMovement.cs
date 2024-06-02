@@ -9,10 +9,10 @@ namespace LNE.Pipes
     [SerializeField]
     private float _speed = 1f;
 
-    private GameCorePresenter _gameCoreManager;
+    private GamePlayManager _gameCoreManager;
 
     [Inject]
-    private void Construct(GameCorePresenter gameCoreManager)
+    private void Construct(GamePlayManager gameCoreManager)
     {
       _gameCoreManager = gameCoreManager;
     }

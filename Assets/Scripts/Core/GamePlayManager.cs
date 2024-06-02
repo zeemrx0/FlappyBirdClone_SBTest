@@ -6,7 +6,7 @@ using Zenject;
 
 namespace LNE.Core
 {
-  public class GameCorePresenter : MonoBehaviour
+  public class GamePlayManager : MonoBehaviour
   {
     public event Action<bool> OnChangePlayMode;
     public bool IsGameOver { get; private set; } = false;
@@ -25,11 +25,16 @@ namespace LNE.Core
     private InfoCanvas _infoCanvas;
 
     private ZenjectSceneLoader _zenjectSceneLoader;
+    private SavingManager _savingSystem;
 
     [Inject]
-    private void Construct(ZenjectSceneLoader zenjectSceneLoader)
+    private void Construct(
+      ZenjectSceneLoader zenjectSceneLoader,
+      SavingManager savingSystem
+    )
     {
       _zenjectSceneLoader = zenjectSceneLoader;
+      _savingSystem = savingSystem;
     }
 
     public void StartGame(bool isAIPlayMode)
@@ -56,6 +61,15 @@ namespace LNE.Core
 
       IsGameOver = true;
       TriggerPlayerDead();
+      ScoreModel highScore = _savingSystem.Load<ScoreModel>(
+        SavingPath.HighScore,
+        new ScoreModel()
+      );
+      Debug.Log("High score: " + highScore.Score);
+      if (ScoreModel.Score > highScore.Score)
+      {
+        _savingSystem.Save(ScoreModel, SavingPath.HighScore);
+      }
       _gameOverCanvas.Show();
       _gameOverCanvas.SetScore(ScoreModel.Score);
       _infoCanvas.Hide();

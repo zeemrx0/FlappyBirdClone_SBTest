@@ -20,7 +20,7 @@ namespace LNE.Birds
     [SerializeField]
     private Ground _ground;
 
-    private GameCorePresenter _gameCoreManager;
+    private GamePlayManager _gameCoreManager;
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
@@ -32,7 +32,7 @@ namespace LNE.Birds
 
     [Inject]
     private void Construct(
-      GameCorePresenter gameCoreManager,
+      GamePlayManager gameCoreManager,
       PlayerInputManager playerInputManager
     )
     {
