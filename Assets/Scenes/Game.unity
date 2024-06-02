@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _destroyXPosition: -21
-  _resetXPosition: 21
+  _otherGround: {fileID: 719148369}
 --- !u!114 &312281909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1281,7 +1281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _destroyXPosition: -21
-  _resetXPosition: 21
+  _otherGround: {fileID: 312281907}
 --- !u!1 &738504101
 GameObject:
   m_ObjectHideFlags: 0
@@ -1819,8 +1819,8 @@ GameObject:
   - component: {fileID: 1059909725}
   - component: {fileID: 1059909719}
   - component: {fileID: 1059909720}
-  - component: {fileID: 1059909721}
   - component: {fileID: 1059909722}
+  - component: {fileID: 1059909726}
   m_Layer: 0
   m_Name: PlayerBird
   m_TagString: Player
@@ -1873,20 +1873,6 @@ MonoBehaviour:
   _flapSound: {fileID: 8300000, guid: 6c66df6a94ab0442b9a0d06d7b7da743, type: 3}
   _hitSound: {fileID: 8300000, guid: 755cf88356ec74be5ac81f1717a038e4, type: 3}
   _fallSound: {fileID: 8300000, guid: 5c882a14004464327989e4b3f0d83082, type: 3}
---- !u!114 &1059909721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1059909717}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a5f0061d5a2e4cbf9dc78548b53e597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Size>k__BackingField: {x: 1.9, y: 1.5}
-  <Offset>k__BackingField: {x: 0, y: 0}
 --- !u!114 &1059909722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2070,6 +2056,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1059909726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059909717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82b8a6f8630a34a16a4597bcdec3fe57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Radius>k__BackingField: 0.87
+  <Offset>k__BackingField: {x: 0, y: 0}
 --- !u!1 &1245496389
 GameObject:
   m_ObjectHideFlags: 0

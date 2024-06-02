@@ -22,7 +22,7 @@ namespace LNE.Birds
     private GamePlayManager _gamePlayManager;
     private PlayerInputManager _playerInputManager;
     private BirdMovementView _view;
-    private GameBoxCollider _collider;
+    private GameCircleCollider _collider;
     private BirdMovementModel _model = new BirdMovementModel();
     private AIBird _aiBird;
 
@@ -41,7 +41,7 @@ namespace LNE.Birds
     private void Awake()
     {
       _view = GetComponent<BirdMovementView>();
-      _collider = GetComponent<GameBoxCollider>();
+      _collider = GetComponent<GameCircleCollider>();
       _aiBird = GetComponent<AIBird>();
     }
 

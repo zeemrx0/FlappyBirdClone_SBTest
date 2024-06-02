@@ -17,7 +17,7 @@ namespace LNE.Birds
 
     private GamePlayManager _gamePlayManager;
     private BirdMovementPresenter _birdMovementPresenter;
-    private GameBoxCollider _collider;
+    private GameCircleCollider _collider;
     private float _heightDifference = 0f;
     private float _timeUntilNextFlap = 0f;
 
@@ -30,7 +30,7 @@ namespace LNE.Birds
     private void Awake()
     {
       _birdMovementPresenter = GetComponent<BirdMovementPresenter>();
-      _collider = GetComponent<GameBoxCollider>();
+      _collider = GetComponent<GameCircleCollider>();
     }
 
     private void Update()
@@ -71,7 +71,7 @@ namespace LNE.Birds
           if (_birdMovementPresenter.TryFlap())
           {
             _timeUntilNextFlap = Math.Clamp(
-              (_aiBirdData.FlapCooldownCoefficient/1000)
+              _aiBirdData.FlapCooldownCoefficient
                 * _birdMovementPresenter.FlapForce
                 / _heightDifference,
               0f,

@@ -10,7 +10,7 @@ namespace LNE.Grounds
     private float _destroyXPosition = -21f;
 
     [SerializeField]
-    private float _resetXPosition = 21f;
+    private GameObject _otherGround;
 
     private GamePlayManager _gamePlayManager;
 
@@ -36,7 +36,7 @@ namespace LNE.Grounds
       if (transform.position.x < _destroyXPosition)
       {
         transform.position = new Vector3(
-          _resetXPosition,
+          _otherGround.transform.position.x + 21f,
           transform.position.y,
           transform.position.z
         );
