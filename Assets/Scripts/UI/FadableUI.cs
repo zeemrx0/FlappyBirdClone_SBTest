@@ -7,10 +7,10 @@ namespace LNE.UI
   public class FadableUI : MonoBehaviour
   {
     [SerializeField]
-    private float _fadeInDuration = 0.5f;
+    private float _fadeInDuration = 0.1f;
 
     [SerializeField]
-    private float _fadeOutDuration = 0.5f;
+    private float _fadeOutDuration = 0.1f;
 
     private CanvasGroup _canvasGroup;
 
@@ -23,11 +23,11 @@ namespace LNE.UI
 
     public void Show()
     {
-      _canvasGroup.alpha = 1;
       StartCoroutine(FadeIn());
+      
     }
 
-    public IEnumerator FadeIn()
+    private IEnumerator FadeIn()
     {
       _canvasGroup.alpha = 0;
 
@@ -41,15 +41,16 @@ namespace LNE.UI
       }
 
       _canvasGroup.alpha = 1;
+      _canvasGroup.blocksRaycasts = true;
+      _canvasGroup.interactable = true;
     }
 
     public void Hide()
     {
-      _canvasGroup.alpha = 0;
       StartCoroutine(FadeOut());
     }
 
-    public IEnumerator FadeOut()
+    private IEnumerator FadeOut()
     {
       _canvasGroup.alpha = 1;
 
@@ -63,6 +64,8 @@ namespace LNE.UI
       }
 
       _canvasGroup.alpha = 0;
+      _canvasGroup.blocksRaycasts = false;
+      _canvasGroup.interactable = false;
     }
   }
 }

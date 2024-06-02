@@ -10,9 +10,6 @@ namespace LNE.UI
     private TextMeshProUGUI _scoreText;
 
     [SerializeField]
-    private ToggleButton _exitAIPlayModeButton;
-
-    [SerializeField]
     private FadableUI _AIModeMessage;
 
     public void SetActive(bool isActive)
@@ -23,11 +20,6 @@ namespace LNE.UI
     public void SetScore(int score)
     {
       _scoreText.text = score.ToString();
-    }
-
-    public void SetExitAIPlayModeButtonState(bool isOn)
-    {
-      _exitAIPlayModeButton.SetState(isOn);
     }
 
     public void ShowAIModeMessage(float delay)

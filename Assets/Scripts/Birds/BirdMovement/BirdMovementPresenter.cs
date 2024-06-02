@@ -21,7 +21,6 @@ namespace LNE.Birds
 
     private GamePlayManager _gamePlayManager;
     private PlayerInputManager _playerInputManager;
-    private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
     private GameBoxCollider _collider;
     private BirdMovementModel _model;
@@ -37,8 +36,6 @@ namespace LNE.Birds
     {
       _gamePlayManager = gamePlayManager;
       _playerInputManager = playerInputManager;
-      _playerInputManager.Init();
-      _playerInputAction = _playerInputManager.PlayerInputAction;
     }
 
     private void Awake()
@@ -51,13 +48,13 @@ namespace LNE.Birds
 
     private void OnEnable()
     {
-      _playerInputAction.BirdMovement.Flap.performed += ctx => HandleFlap(ctx);
+      _playerInputManager.TapArea.PointerDownEvent += HandleFlap;
       _gamePlayManager.OnChangePlayMode += HandleOnChangePlayMode;
     }
 
     private void OnDisable()
     {
-      _playerInputAction.BirdMovement.Flap.performed -= ctx => HandleFlap(ctx);
+      _playerInputManager.TapArea.PointerDownEvent -= HandleFlap;
       _gamePlayManager.OnChangePlayMode -= HandleOnChangePlayMode;
     }
 
@@ -152,9 +149,7 @@ namespace LNE.Birds
       }
     }
 
-    private void HandleFlap(
-      UnityEngine.InputSystem.InputAction.CallbackContext ctx
-    )
+    public void HandleFlap()
     {
       if (_gamePlayManager.IsPlayerDead)
       {
@@ -168,10 +163,7 @@ namespace LNE.Birds
 
       if (_gamePlayManager.IsAIPlayMode)
       {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-          _gamePlayManager.ShowAIModeMessage();
-        }
+        _gamePlayManager.ShowAIModeMessage();
         return;
       }
 

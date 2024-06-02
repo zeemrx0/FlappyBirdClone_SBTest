@@ -29,6 +29,9 @@ namespace LNE.Core
     [SerializeField]
     private InfoCanvas _infoCanvas;
 
+    [SerializeField]
+    private ControlCanvas _controlCanvas;
+
     private ZenjectSceneLoader _zenjectSceneLoader;
     private SavingManager _savingSystem;
 
@@ -67,6 +70,7 @@ namespace LNE.Core
       _gameStartCanvas.SetActive(false);
       _infoCanvas.SetActive(true);
       _infoCanvas.SetScore(ScoreModel.Score);
+      _controlCanvas.SetToggleAIPlayModeButtonActive(true);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
@@ -94,15 +98,16 @@ namespace LNE.Core
       {
         _gameOverCanvas.SetCrownActive(false);
       }
-      _gameOverCanvas.SetHighScore(highScore.Score);
       _infoCanvas.SetActive(false);
+      _controlCanvas.SetActive(false);
+      _gameOverCanvas.SetHighScore(highScore.Score);
       _gameOverCanvas.SetActive(true);
     }
 
     public void ToggleIsAIPlayMode()
     {
       IsAIPlayMode = !IsAIPlayMode;
-      _infoCanvas.SetExitAIPlayModeButtonState(IsAIPlayMode);
+      _controlCanvas.SetToggleAIPlayModeButtonState(IsAIPlayMode);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
