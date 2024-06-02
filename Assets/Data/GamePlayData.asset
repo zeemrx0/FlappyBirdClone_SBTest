@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GamePlayData
   m_EditorClassIdentifier: 
   <InitialGameSpeed>k__BackingField: 7
-  <GameSpeedIncrement>k__BackingField: 0.05
-  <GameSpeedIncrementInterval>k__BackingField: 20
+  <GameSpeedIncrement>k__BackingField: 0.1
+  <GameSpeedIncrementInterval>k__BackingField: 10

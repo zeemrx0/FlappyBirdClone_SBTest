@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51003cc15479417ab0a743943998a87, type: 3}
   m_Name: AIBirdData
   m_EditorClassIdentifier: 
-  <TargetGap>k__BackingField: -0.75
+  <TargetGap>k__BackingField: -0.746
   <FlapCooldownCoefficient>k__BackingField: 0.6
   <MaxFlapCooldown>k__BackingField: 0.1
