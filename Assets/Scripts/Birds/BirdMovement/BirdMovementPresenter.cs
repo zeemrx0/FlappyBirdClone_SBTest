@@ -2,8 +2,8 @@ using LNE.Colliders;
 using LNE.Core;
 using LNE.Inputs;
 using LNE.Pipes;
+using LNE.Utilities;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Zenject;
 
 namespace LNE.Birds
@@ -19,12 +19,16 @@ namespace LNE.Birds
     [SerializeField]
     private Transform _groundContainer;
 
+    [SerializeField]
+    private Transform _floor;
+
     private GamePlayManager _gamePlayManager;
     private PlayerInputManager _playerInputManager;
     private BirdMovementView _view;
     private GameCircleCollider _collider;
     private BirdMovementModel _model = new BirdMovementModel();
     private AIBird _aiBird;
+    private Vector2 _previousPosition;
 
     public float FlapForce => _birdMovementData.FlapForce;
 
@@ -75,12 +79,19 @@ namespace LNE.Birds
         return;
       }
 
+      CheckIsCollidingWithFloor();
+
       CheckIsCollidingWithPipe();
 
       if (_model.TimeUntilNextFlap > 0f)
       {
         _model.TimeUntilNextFlap -= Time.deltaTime;
       }
+    }
+
+    private void LateUpdate()
+    {
+      _previousPosition = transform.position;
     }
 
     private void CheckIsCollidingWithPipe()
@@ -97,7 +108,15 @@ namespace LNE.Birds
           _view.PlayDeadAnimation();
           _view.PlayHitSound();
           _view.PlayFallSound();
+
+          _view.SpawnHitVFX(
+            ColliderHelper.GetTouchPoint(
+              _collider,
+              pipe.GetComponent<GameBoxCollider>()
+            ) ?? _collider.transform.position
+          );
           _gamePlayManager.TriggerPlayerDead();
+          transform.position = _previousPosition;
           return;
         }
       }
@@ -112,12 +131,27 @@ namespace LNE.Birds
           _model.VerticalSpeed = 0f;
           if (!_gamePlayManager.IsPlayerDead)
           {
+            _view.SpawnHitVFX(
+              ColliderHelper.GetTouchPoint(
+                _collider,
+                ground.GetComponent<GameBoxCollider>()
+              ) ?? _collider.transform.position
+            );
             _view.PlayDeadAnimation();
             _view.PlayHitSound();
+            transform.position = _previousPosition;
           }
           _gamePlayManager.TriggerGameOver();
           return;
         }
+      }
+    }
+
+    private void CheckIsCollidingWithFloor()
+    {
+      if (_collider.IsCollidingWith(_floor.GetComponent<GameBoxCollider>()))
+      {
+        transform.position = _previousPosition;
       }
     }
 

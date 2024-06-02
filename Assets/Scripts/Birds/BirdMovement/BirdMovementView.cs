@@ -1,3 +1,4 @@
+using LNE.Core;
 using LNE.Utilities.Constants;
 using UnityEngine;
 
@@ -13,6 +14,9 @@ namespace LNE.Birds
 
     [SerializeField]
     private AudioClip _fallSound;
+
+    [SerializeField]
+    private VFX _hitVFX;
 
     private AudioSource _audioSource;
     private Animator _animator;
@@ -52,6 +56,11 @@ namespace LNE.Birds
     public void PlayDeadAnimation()
     {
       _animator.SetBool(AnimationParameter.IsDead, true);
+    }
+
+    public void SpawnHitVFX(Vector2 position)
+    {
+      Instantiate(_hitVFX, position, Quaternion.identity);
     }
   }
 }

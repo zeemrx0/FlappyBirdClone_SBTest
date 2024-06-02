@@ -1858,6 +1858,7 @@ MonoBehaviour:
   _birdMovementData: {fileID: 11400000, guid: 2540238a39da74982b5cb4565879532a, type: 2}
   _pipePairSpawner: {fileID: 913703296}
   _groundContainer: {fileID: 1367890808}
+  _floor: {fileID: 687018081}
 --- !u!114 &1059909720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1873,6 +1874,7 @@ MonoBehaviour:
   _flapSound: {fileID: 8300000, guid: 6c66df6a94ab0442b9a0d06d7b7da743, type: 3}
   _hitSound: {fileID: 8300000, guid: 755cf88356ec74be5ac81f1717a038e4, type: 3}
   _fallSound: {fileID: 8300000, guid: 5c882a14004464327989e4b3f0d83082, type: 3}
+  _hitVFX: {fileID: 2284020445561853452, guid: ee93661516faf46a69f1541553806a7e, type: 3}
 --- !u!114 &1059909722
 MonoBehaviour:
   m_ObjectHideFlags: 0
