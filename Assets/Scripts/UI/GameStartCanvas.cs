@@ -4,9 +4,9 @@ namespace LNE.UI
 {
   public class GameStartCanvas : MonoBehaviour
   {
-    public void Hide()
+    public void SetActive(bool isActive)
     {
-      gameObject.SetActive(false);
+      gameObject.SetActive(isActive);
     }
   }
 }

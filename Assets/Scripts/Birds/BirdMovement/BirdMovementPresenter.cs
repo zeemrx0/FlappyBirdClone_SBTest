@@ -4,6 +4,7 @@ using LNE.Grounds;
 using LNE.Inputs;
 using LNE.Pipes;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 
 namespace LNE.Birds
@@ -19,7 +20,7 @@ namespace LNE.Birds
     [SerializeField]
     private Ground _ground;
 
-    private GameCorePresenter _gameCoreManager;
+    private GamePlayManager _gameCoreManager;
     private PlayerInputManager _playerInputManager;
     private PlayerInputAction _playerInputAction;
     private BirdMovementView _view;
@@ -31,7 +32,7 @@ namespace LNE.Birds
 
     [Inject]
     private void Construct(
-      GameCorePresenter gameCoreManager,
+      GamePlayManager gameCoreManager,
       PlayerInputManager playerInputManager
     )
     {
@@ -153,14 +154,22 @@ namespace LNE.Birds
       UnityEngine.InputSystem.InputAction.CallbackContext ctx
     )
     {
-      if (_gameCoreManager.IsAIPlayMode)
+      if (_gameCoreManager.IsPlayerDead)
       {
-        _gameCoreManager.ShowAIModeMessage();
         return;
       }
 
-      if (!_gameCoreManager.IsGameStarted || _gameCoreManager.IsPlayerDead)
+      if (!_gameCoreManager.IsGameStarted)
       {
+        _gameCoreManager.StartGame();
+      }
+
+      if (_gameCoreManager.IsAIPlayMode)
+      {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+          _gameCoreManager.ShowAIModeMessage();
+        }
         return;
       }
 

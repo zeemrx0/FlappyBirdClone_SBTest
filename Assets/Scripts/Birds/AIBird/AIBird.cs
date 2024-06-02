@@ -15,14 +15,14 @@ namespace LNE.Birds
     [SerializeField]
     private PipeSpawner _pipeSpawner;
 
-    private GameCorePresenter _gameCoreManager;
+    private GamePlayManager _gameCoreManager;
     private BirdMovementPresenter _birdMovementPresenter;
     private GameBoxCollider _collider;
     private float _heightDifference = 0f;
     private float _timeUntilNextFlap = 0f;
 
     [Inject]
-    private void Construct(GameCorePresenter gameCoreManager)
+    private void Construct(GamePlayManager gameCoreManager)
     {
       _gameCoreManager = gameCoreManager;
     }

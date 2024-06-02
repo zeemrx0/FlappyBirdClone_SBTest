@@ -1,4 +1,5 @@
 using System;
+using LNE.Inputs;
 using LNE.UI;
 using LNE.Utilities.Constants;
 using UnityEngine;
@@ -6,14 +7,14 @@ using Zenject;
 
 namespace LNE.Core
 {
-  public class GameCorePresenter : MonoBehaviour
+  public class GamePlayManager : MonoBehaviour
   {
     public event Action<bool> OnChangePlayMode;
     public bool IsGameOver { get; private set; } = false;
     public bool IsGameStarted { get; private set; } = false;
     public bool IsPlayerDead { get; private set; } = false;
-    public int Points { get; private set; } = 0;
     public bool IsAIPlayMode { get; private set; } = false;
+    public ScoreModel ScoreModel { get; private set; } = new ScoreModel();
 
     [SerializeField]
     private GameOverCanvas _gameOverCanvas;
@@ -25,14 +26,19 @@ namespace LNE.Core
     private InfoCanvas _infoCanvas;
 
     private ZenjectSceneLoader _zenjectSceneLoader;
+    private SavingManager _savingSystem;
 
     [Inject]
-    private void Construct(ZenjectSceneLoader zenjectSceneLoader)
+    private void Construct(
+      ZenjectSceneLoader zenjectSceneLoader,
+      SavingManager savingSystem
+    )
     {
       _zenjectSceneLoader = zenjectSceneLoader;
+      _savingSystem = savingSystem;
     }
 
-    public void StartGame(bool isAIPlayMode)
+    public void StartGame()
     {
       if (IsGameStarted)
       {
@@ -40,10 +46,9 @@ namespace LNE.Core
       }
 
       IsGameStarted = true;
-      IsAIPlayMode = isAIPlayMode;
-      _gameStartCanvas.Hide();
-      _infoCanvas.Show();
-      _infoCanvas.SetPoints(Points);
+      _gameStartCanvas.SetActive(false);
+      _infoCanvas.SetActive(true);
+      _infoCanvas.SetScore(ScoreModel.Score);
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
@@ -56,9 +61,24 @@ namespace LNE.Core
 
       IsGameOver = true;
       TriggerPlayerDead();
-      _gameOverCanvas.Show();
-      _gameOverCanvas.SetPoints(Points);
-      _infoCanvas.Hide();
+      ScoreModel highScore = _savingSystem.Load<ScoreModel>(
+        SavingPath.HighScore,
+        new ScoreModel()
+      );
+      _gameOverCanvas.SetScore(ScoreModel.Score);
+      if (ScoreModel.Score > highScore.Score)
+      {
+        highScore = ScoreModel;
+        _savingSystem.Save(ScoreModel, SavingPath.HighScore);
+        _gameOverCanvas.SetCrownActive(true);
+      }
+      else
+      {
+        _gameOverCanvas.SetCrownActive(false);
+      }
+      _gameOverCanvas.SetHighScore(highScore.Score);
+      _infoCanvas.SetActive(false);
+      _gameOverCanvas.SetActive(true);
     }
 
     public void ToggleIsAIPlayMode()
@@ -85,8 +105,8 @@ namespace LNE.Core
 
     public void AddPoint()
     {
-      Points++;
-      _infoCanvas.SetPoints(Points);
+      ScoreModel.Score++;
+      _infoCanvas.SetScore(ScoreModel.Score);
     }
 
     public void ShowAIModeMessage()
