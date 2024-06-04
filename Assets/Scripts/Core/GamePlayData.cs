@@ -17,5 +17,11 @@ namespace LNE.Core
 
     [field: SerializeField]
     public int GameSpeedIncrementInterval { get; set; }
+
+    [field: SerializeField]
+    public float StartGameSpeed { get; set; }
+
+    [field: SerializeField]
+    public float BirdOffset { get; set; }
   }
 }

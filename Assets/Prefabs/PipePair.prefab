@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1611135832551892812}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -13, z: 0}
+  m_LocalPosition: {x: 0, y: -15.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5f0061d5a2e4cbf9dc78548b53e597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Size>k__BackingField: {x: 3, y: 20}
+  <Size>k__BackingField: {x: 3, y: 27.5}
   <Offset>k__BackingField: {x: 0, y: 0}
 --- !u!1 &5925330482058848726
 GameObject:
@@ -126,7 +126,7 @@ Transform:
   m_GameObject: {fileID: 5925330482058848726}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 13, z: 0}
+  m_LocalPosition: {x: 0, y: 15.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5f0061d5a2e4cbf9dc78548b53e597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Size>k__BackingField: {x: 3, y: 20}
+  <Size>k__BackingField: {x: 3, y: 27.5}
   <Offset>k__BackingField: {x: 0, y: 0}
 --- !u!1 &7769903104679087280
 GameObject:
@@ -245,7 +245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d2a7c161f6f4965a915de1c8b3e0de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 7
 --- !u!114 &655851387314236235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,3 +257,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96d2aabe5e8b1424681fa8f31161c13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _destroyXPosition: -10

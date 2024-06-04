@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using LNE.UI;
 using LNE.Utilities.Constants;
 using UnityEngine;
@@ -33,22 +35,34 @@ namespace LNE.Core
     private ControlCanvas _controlCanvas;
 
     [SerializeField]
+    private InputUsernameCanvas _inputNameCanvas;
+
+    [SerializeField]
+    private LeaderboardCanvas _leaderboardCanvas;
+
+    [SerializeField]
     private AudioClip _scoreSound;
 
     private ZenjectSceneLoader _zenjectSceneLoader;
     private SavingManager _savingSystem;
+    private NetworkSavingManager _networkSavingManager;
 
     private AudioSource _audioSource;
     private ScoreModel _previousScoreModel = new ScoreModel();
 
+    public float StartGameSpeed => _gamePlayData.StartGameSpeed;
+    public float BirdOffset => _gamePlayData.BirdOffset;
+
     [Inject]
     private void Construct(
       ZenjectSceneLoader zenjectSceneLoader,
-      SavingManager savingSystem
+      SavingManager savingSystem,
+      NetworkSavingManager networkSavingManager
     )
     {
       _zenjectSceneLoader = zenjectSceneLoader;
       _savingSystem = savingSystem;
+      _networkSavingManager = networkSavingManager;
     }
 
     private void Awake()
@@ -85,7 +99,7 @@ namespace LNE.Core
       OnChangePlayMode?.Invoke(IsAIPlayMode);
     }
 
-    public void TriggerGameOver()
+    public async void TriggerGameOver()
     {
       if (IsGameOver)
       {
@@ -112,14 +126,42 @@ namespace LNE.Core
       _infoCanvas.SetActive(false);
       _controlCanvas.SetActive(false);
       _gameOverCanvas.SetHighScore(highScore.Score);
-      _gameOverCanvas.SetActive(true);
+
+      if (await CheckIsInTop(10, ScoreModel.Score) == false)
+      {
+        _gameOverCanvas.SetActive(true);
+      }
     }
 
-    public void ToggleIsAIPlayMode()
+    public async Task<bool> CheckIsInTop(int top, int currentScore)
     {
-      IsAIPlayMode = !IsAIPlayMode;
-      _controlCanvas.SetToggleAIPlayModeButtonState(IsAIPlayMode);
-      OnChangePlayMode?.Invoke(IsAIPlayMode);
+      if (currentScore == 0)
+      {
+        return false;
+      }
+
+      var scoreList = await _networkSavingManager.GetScoreListAsync();
+
+      if (scoreList.Count < top)
+      {
+        for (int i = 0; i < Mathf.Min(top, scoreList.Count); i++)
+        {
+          if (currentScore > scoreList[i].Score)
+          {
+            _gameOverCanvas.SetActive(false);
+            _inputNameCanvas.SetRankText((i + 1).ToString());
+            _inputNameCanvas.SetActive(true);
+            return true;
+          }
+        }
+
+        _gameOverCanvas.SetActive(false);
+        _inputNameCanvas.SetRankText((scoreList.Count + 1).ToString());
+        _inputNameCanvas.SetActive(true);
+
+        return true;
+      }
+      return false;
     }
 
     public void TriggerPlayerDead()
@@ -137,6 +179,13 @@ namespace LNE.Core
       _zenjectSceneLoader.LoadScene(SceneName.Game);
     }
 
+    public void ToggleIsAIPlayMode()
+    {
+      IsAIPlayMode = !IsAIPlayMode;
+      _controlCanvas.SetToggleAIPlayModeButtonState(IsAIPlayMode);
+      OnChangePlayMode?.Invoke(IsAIPlayMode);
+    }
+
     public void IncreaseScore()
     {
       ScoreModel.Score++;
@@ -146,6 +195,25 @@ namespace LNE.Core
     public void ShowAIModeMessage()
     {
       _infoCanvas.ShowAIModeMessage(2f);
+    }
+
+    public void SaveScoreToNetwork()
+    {
+      ScoreModel.Username = _inputNameCanvas.GetUsername();
+      _networkSavingManager.AddScore(ScoreModel);
+      HideInputNameCanvas();
+    }
+
+    public void HideInputNameCanvas()
+    {
+      _inputNameCanvas.SetActive(false);
+      _gameOverCanvas.SetActive(true);
+    }
+
+    public void SetLeaderboardCanvasActive(bool isActive)
+    {
+      _gameOverCanvas.SetActive(!isActive);
+      _leaderboardCanvas.SetActive(isActive);
     }
   }
 }

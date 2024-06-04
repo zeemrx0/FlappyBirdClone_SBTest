@@ -68,6 +68,8 @@ namespace LNE.Birds
         return;
       }
 
+      MoveBackward();
+
       ApplyGravity();
 
       _view.Fly(_model.VerticalSpeed, _birdMovementData.RotateSpeed);
@@ -166,6 +168,22 @@ namespace LNE.Birds
       _model.VerticalSpeed = _birdMovementData.FlapForce;
       _view.PlayFlapSound();
       _view.PlayFlapAnimation();
+    }
+
+    public void MoveBackward()
+    {
+      if (transform.position.x <= _gamePlayManager.BirdOffset)
+      {
+        transform.position = new Vector3(
+          _gamePlayManager.BirdOffset,
+          transform.position.y,
+          transform.position.z
+        );
+        return;
+      }
+
+      transform.position +=
+        Vector3.left * Time.deltaTime * _gamePlayManager.StartGameSpeed;
     }
 
     public bool TryFlap()

@@ -17,5 +17,5 @@ MonoBehaviour:
   <MaxSpawnInterval>k__BackingField: 2.1
   <MinSpawnY>k__BackingField: -6
   <MaxSpawnY>k__BackingField: 6
-  <MinSpaceBetweenPipes>k__BackingField: 24.3
-  <MaxSpaceBetweenPipes>k__BackingField: 25.1
+  <MinSpaceBetweenPipes>k__BackingField: 31.8
+  <MaxSpaceBetweenPipes>k__BackingField: 32.6

@@ -8,6 +8,7 @@ namespace LNE.Core
     {
       Container.Bind<GamePlayManager>().FromComponentInHierarchy().AsSingle();
       Container.Bind<SavingManager>().FromComponentInHierarchy().AsSingle();
+      Container.Bind<NetworkSavingManager>().FromComponentInHierarchy().AsSingle();
     }
   }
 }
