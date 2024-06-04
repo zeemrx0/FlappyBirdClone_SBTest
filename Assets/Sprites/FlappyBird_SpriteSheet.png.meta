@@ -220,7 +220,7 @@ TextureImporter:
         width: 57
         height: 49
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -228,6 +228,27 @@ TextureImporter:
       bones: []
       spriteID: 46d0a186ae543449dbd94585063cace2
       internalID: 1337810815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_Leaderboard
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 365
+        width: 52
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e8da8e1df2ab43ea86c385cd3de1c00
+      internalID: 1042347552
       vertices: []
       indices: 
       edges: []
@@ -243,6 +264,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Button_Leaderboard: 1042347552
       Button_Play: -1545177594
       Text_FlappyBird: -431025411
       Text_GameOver: -1190165115

@@ -15,3 +15,5 @@ MonoBehaviour:
   <InitialGameSpeed>k__BackingField: 7
   <GameSpeedIncrement>k__BackingField: 0.1
   <GameSpeedIncrementInterval>k__BackingField: 10
+  <StartGameSpeed>k__BackingField: 1.5
+  <BirdOffset>k__BackingField: -2
